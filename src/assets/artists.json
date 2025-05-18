@@ -1,0 +1,264 @@
+{
+  "groups": [
+    {
+      "name": "BoyWithUke",
+      "number_of_members": 1,
+      "members": [
+        {
+          "name": "Charley Yang",
+          "role": "Voz, compositor, productor, multiinstrumentista"
+        }
+      ],
+      "summary": "Charley Yang, conocido como BoyWithUke, es un artista coreano-estadounidense que ganó popularidad en TikTok con canciones como 'Two Moons' y 'Toxic'. Inicialmente ocultaba su rostro con una máscara LED, revelando su identidad en octubre de 2023. Su música combina pop alternativo con elementos acústicos y electrónicos, explorando temas como la salud mental y el crecimiento personal.",
+      "top_songs": [
+        {
+          "title": "Toxic",
+          "play_count": 777743545,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273e0b8d3e1f3e5c5a3f9c3f9c3"
+        },
+        {
+          "title": "IDGAF",
+          "play_count": 310455287,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273a1b2c3d4e5f6a7b8c9d0e1f2"
+        },
+        {
+          "title": "Two Moons",
+          "play_count": 600000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273b2c3d4e5f6a7b8c9d0e1f2a3"
+        },
+        {
+          "title": "Understand",
+          "play_count": 400000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273c3d4e5f6a7b8c9d0e1f2a3b4"
+        },
+        {
+          "title": "Long Drives",
+          "play_count": 300000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273d4e5f6a7b8c9d0e1f2a3b4c5"
+        }
+      ]
+    },
+    {
+      "name": "AJR",
+      "number_of_members": 3,
+      "members": [
+        {
+          "name": "Adam Met",
+          "role": "Bajo, coros"
+        },
+        {
+          "name": "Jack Met",
+          "role": "Voz principal, guitarra, percusión"
+        },
+        {
+          "name": "Ryan Met",
+          "role": "Teclados, programación, producción"
+        }
+      ],
+      "summary": "AJR es una banda de pop indie formada por los hermanos Adam, Jack y Ryan Met en Nueva York. Comenzaron actuando en las calles y ganaron fama con su enfoque de producción DIY y letras introspectivas. Sus canciones a menudo abordan temas como la salud mental y el cambio climático, logrando éxito viral con temas como 'Weak' y 'World's Smallest Violin'.",
+      "top_songs": [
+        {
+          "title": "Bang!",
+          "play_count": 1000000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273f0e1d2c3b4a5e6d7c8b9a0f1"
+        },
+        {
+          "title": "Weak",
+          "play_count": 900000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273e1d2c3b4a5e6d7c8b9a0f1f0"
+        },
+        {
+          "title": "World's Smallest Violin",
+          "play_count": 700000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273d2c3b4a5e6d7c8b9a0f1f0e1"
+        },
+        {
+          "title": "Burn the House Down",
+          "play_count": 500000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273c3b4a5e6d7c8b9a0f1f0e1d2"
+        },
+        {
+          "title": "The Good Part",
+          "play_count": 400000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273b4a5e6d7c8b9a0f1f0e1d2c3"
+        }
+      ]
+    },
+    {
+      "name": "Vance Joy",
+      "number_of_members": 1,
+      "members": [
+        {
+          "name": "James Gabriel Keogh",
+          "role": "Voz, guitarra, compositor"
+        }
+      ],
+      "summary": "Vance Joy, nacido como James Gabriel Keogh, es un cantautor australiano que alcanzó la fama con su sencillo de 2013 'Riptide'. Su estilo combina pop indie y folk, y ha sido reconocido por su capacidad para escribir canciones emotivas y pegajosas. Ha realizado giras internacionales y ha sido telonero de artistas como Taylor Swift.",
+      "top_songs": [
+        {
+          "title": "Riptide",
+          "play_count": 1500000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273a5e6d7c8b9a0f1f0e1d2c3b4"
+        },
+        {
+          "title": "Mess is Mine",
+          "play_count": 600000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273e6d7c8b9a0f1f0e1d2c3b4a5"
+        },
+        {
+          "title": "Georgia",
+          "play_count": 500000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273d7c8b9a0f1f0e1d2c3b4a5e6"
+        },
+        {
+          "title": "Fire and the Flood",
+          "play_count": 400000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273c8b9a0f1f0e1d2c3b4a5e6d7"
+        },
+        {
+          "title": "Lay It On Me",
+          "play_count": 300000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273b9a0f1f0e1d2c3b4a5e6d7c8"
+        }
+      ]
+    },
+    {
+      "name": "Twenty One Pilots",
+      "number_of_members": 2,
+      "members": [
+        {
+          "name": "Tyler Joseph",
+          "role": "Voz principal, piano, ukelele, bajo"
+        },
+        {
+          "name": "Josh Dun",
+          "role": "Batería, percusión"
+        }
+      ],
+      "summary": "Twenty One Pilots es un dúo musical estadounidense formado en 2009 en Columbus, Ohio. Conocidos por su estilo ecléctico que mezcla pop, rock, hip-hop y electrónica, alcanzaron la fama internacional con su álbum 'Blurryface' en 2015. Sus letras abordan temas como la ansiedad, la depresión y la autoexploración.",
+      "top_songs": [
+        {
+          "title": "Stressed Out",
+          "play_count": 2000000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273e3c3d4e5f6a7b8c9d0e1f2a3"
+        },
+        {
+          "title": "Ride",
+          "play_count": 1500000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273f4d5e6f7a8b9c0d1e2f3a4b5"
+        },
+        {
+          "title": "Heathens",
+          "play_count": 1300000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273a5b6c7d8e9f0a1b2c3d4e5f6"
+        },
+        {
+          "title": "Car Radio",
+          "play_count": 900000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273b6c7d8e9f0a1b2c3d4e5f6a7"
+        },
+        {
+          "title": "Tear in My Heart",
+          "play_count": 800000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273c7d8e9f0a1b2c3d4e5f6a7b8"
+        }
+      ]
+    },
+    {
+      "name": "Imagine Dragons",
+      "number_of_members": 4,
+      "members": [
+        {
+          "name": "Dan Reynolds",
+          "role": "Voz principal"
+        },
+        {
+          "name": "Wayne Sermon",
+          "role": "Guitarra principal"
+        },
+        {
+          "name": "Ben McKee",
+          "role": "Bajo"
+        },
+        {
+          "name": "Daniel Platzman",
+          "role": "Batería"
+        }
+      ],
+      "summary": "Imagine Dragons es una banda de rock alternativo originaria de Las Vegas, conocida por su sonido enérgico y emocional. Saltaron a la fama en 2012 con el sencillo 'It's Time' y consolidaron su éxito con 'Radioactive'. Su estilo fusiona rock, pop y electrónica, abordando temas personales y sociales.",
+      "top_songs": [
+        {
+          "title": "Radioactive",
+          "play_count": 2200000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b2732f8a4b845158f15b54c0e2c6"
+        },
+        {
+          "title": "Demons",
+          "play_count": 1800000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b27317778c7288d6acda81f0e44f"
+        },
+        {
+          "title": "Believer",
+          "play_count": 2400000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b2737c5d1ae8db8cfa4f79c3df1a"
+        },
+        {
+          "title": "Thunder",
+          "play_count": 2000000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273a9c6114a2a4cd0b8b279e1d6"
+        },
+        {
+          "title": "Whatever It Takes",
+          "play_count": 1700000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273fa5a6dc2a0b59fda86bc4603"
+        }
+      ]
+    },
+    {
+      "name": "Half Alive",
+      "number_of_members": 3,
+      "members": [
+        {
+          "name": "Josh Taylor",
+          "role": "Voz principal"
+        },
+        {
+          "name": "Brett Kramer",
+          "role": "Batería"
+        },
+        {
+          "name": "J Tyler Johnson",
+          "role": "Bajo"
+        }
+      ],
+      "summary": "Half Alive es una banda de indie pop/rock originaria de Long Beach, California. Alcanzaron notoriedad con el video coreografiado de su canción 'Still Feel.'. Su música combina influencias de funk, electrónica y soul, con letras introspectivas y una estética visual cuidadosamente elaborada.",
+      "top_songs": [
+        {
+          "title": "Still Feel.",
+          "play_count": 100000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b27367a1be737a3e9dbf07f0de59"
+        },
+        {
+          "title": "Runaway",
+          "play_count": 50000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273f949af8de86225f8773b47c4"
+        },
+        {
+          "title": "What's Wrong",
+          "play_count": 40000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b2738d3ce271d08e2f63a61c2b3e"
+        },
+        {
+          "title": "Arrow",
+          "play_count": 35000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273406774e0a5e74874ec58bcd9"
+        },
+        {
+          "title": "Summerland",
+          "play_count": 30000000,
+          "cover_art_url": "https://i.scdn.co/image/ab67616d0000b273ed67df2e351c4c4727632e2b"
+        }
+      ]
+    }
+  ]
+}
