@@ -1,10 +1,26 @@
 ---
+import ArtistCard from "@components/ArtistCard.astro";
 import MainLayout from "@layouts/MainLayout.astro";
+
+import artists from "../assets/artists.json";
 ---
 
 <MainLayout title="Artistas">
-  <h2>Artistas invitados</h2>
-  <h3>Confirmados</h3>
-
-  <h3>Pendientes</h3>
+  <section class="">
+    <h2>Artistas</h2>
+    <p></p>
+  </section>
+  <section class="">
+    {
+      artists.groups.map((group) => (
+        <ArtistCard
+          name={group.name}
+          url_image={group.url_image}
+          members={group.members}
+          summary={group.summary}
+          top_songs={group.top_songs}
+        />
+      ))
+    }
+  </section>
 </MainLayout>
