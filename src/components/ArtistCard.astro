@@ -2,35 +2,35 @@
 const { name, url_image, members, summary, top_songs } = Astro.props;
 ---
 
-<article class="artist-group">
-  <header class="artist-group_header">
-    <h2 class="artist-group_title">{name}</h2>
+<article class="artist-card">
+  <header class="artist-card__header">
+    <h2 class="artist-card__title">{name}</h2>
   </header>
 
-  <figure class="artist-group_picture">
+  <figure class="artist-card__figure">
     {
       url_image && (
         <img
-          class="artist-group_picture_img"
+          class="artist-card__image"
           src={url_image}
           alt={`Imagen de ${name}`}
         />
       )
     }
-    <figcaption class="artist-group_picture_caption">
+    <figcaption class="artist-card__caption">
       Foto promocional de {name}
     </figcaption>
   </figure>
 
-  <section class="artist-group_content">
-    <h4 class="artist-group_section_title">Miembros</h4>
+  <section class="artist-card__body">
+    <h4 class="artist-card__section-title">Miembros</h4>
     {
       members && (
-        <ul class="artist-group_list">
+        <ul class="artist-card__member-list">
           {members.map((member) => (
-            <li class="artist-group_list_item">
-              <strong class="artist-group_member_name">{member.name}</strong> –{" "}
-              <span class="artist-group_member_role">{member.role}</span>
+            <li class="artist-card__member-item">
+              <strong class="artist-card__member-name">{member.name}</strong> –{" "}
+              <span class="artist-card__member-role">{member.role}</span>
             </li>
           ))}
         </ul>
@@ -40,15 +40,13 @@ const { name, url_image, members, summary, top_songs } = Astro.props;
 </article>
 
 <style>
-  .artist-group {
+  .artist-card {
     margin: 1rem;
-
     display: grid;
     grid-template-areas:
       "header"
       "image"
       "content";
-
     gap: 1rem;
     width: fit-content;
     max-width: 60rem;
@@ -59,64 +57,63 @@ const { name, url_image, members, summary, top_songs } = Astro.props;
     box-shadow: 5px 5px 4px black;
   }
 
-  .artist-group_header {
+  .artist-card__header {
     grid-area: header;
     text-align: center;
   }
 
-  .artist-group_title {
+  .artist-card__title {
     font-size: 1.75rem;
     margin: 0;
   }
 
-  .artist-group_picture {
+  .artist-card__figure {
     grid-area: image;
     max-width: 100%;
     text-align: center;
   }
 
-  .artist-group_picture_img {
+  .artist-card__image {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
   }
 
-  .artist-group_picture_caption {
+  .artist-card__caption {
     font-size: 0.875rem;
     color: #555;
     margin-top: 0.5rem;
   }
 
-  .artist-group_content {
+  .artist-card__body {
     grid-area: content;
   }
 
-  .artist-group_section_title {
+  .artist-card__section-title {
     font-size: 1.25rem;
     margin-bottom: 0.5rem;
   }
 
-  .artist-group_list {
+  .artist-card__member-list {
     list-style: none;
     padding-left: 0;
     margin: 0;
   }
 
-  .artist-group_list_item {
+  .artist-card__member-item {
     margin-bottom: 0.5rem;
   }
 
-  .artist-group_member_name {
+  .artist-card__member-name {
     font-weight: bold;
   }
 
-  .artist-group_member_role {
+  .artist-card__member-role {
     font-style: italic;
   }
 
-  /* Responsive para pantallas grandes */
   @media (min-width: 768px) {
-    .artist-group {
+    .artist-card {
       grid-template-areas:
         "header header"
         "image content";
@@ -124,7 +121,7 @@ const { name, url_image, members, summary, top_songs } = Astro.props;
       align-items: start;
     }
 
-    .artist-group_picture {
+    .artist-card__figure {
       justify-self: center;
     }
   }
