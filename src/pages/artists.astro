@@ -6,11 +6,16 @@ import artists from "../assets/artists.json";
 ---
 
 <MainLayout title="Artistas">
-  <section class="">
-    <h2>Artistas</h2>
-    <p></p>
+  <section class="artists-page__intro">
+    <h2 class="artists-page__title">Artistas</h2>
+    <p class="artists-page__description">
+      Aquí encontrarás toda la información que necesitás conocer sobre los
+      Artistas que participaran el <span class="artists-page__highlight"
+        >Fiesta del Sol 2025</span
+      >
+    </p>
   </section>
-  <section class="">
+  <section class="artists-page__contanter-cards">
     {
       artists.groups.map((group) => (
         <ArtistCard
