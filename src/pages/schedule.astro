@@ -1,8 +1,27 @@
 ---
 import MainLayout from "@layouts/MainLayout.astro";
+import ArtistTable from "@components/ArtistTable.astro";
+
+import artists from "@assets/artists.json";
+
+const time = [
+  "16:00 - 17:00",
+  "17:15 - 18:15",
+  "18:30 - 19:30",
+  "20:00 - 21:30",
+  "21:45 - 23:45",
+];
 ---
 
 <MainLayout>
-  <section class="schedule-page__intro"></section>
-  <section class="schedule-page__content"></section>
+  <section class="schedule-page__intro">
+    <h2 class="schedule-page__title">Cronograma</h2>
+    <p>
+      Aqui encontraras los horarios de cada evento, las canciones que se
+      cantaran y los descanson
+    </p>
+  </section>
+  <section class="schedule-page__content">
+    <ArtistTable time={time} groups={artists.groups} />
+  </section>
 </MainLayout>
