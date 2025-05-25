@@ -1,0 +1,174 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+---
+
+<!-- tendrá un formulario para acreditar su asistencia al evento. 
+ El formulario tendrá los campos nombre y apellido, documento (solo dni o seleccionable y nro de documento), numero de contacto, email y fecha de nacimiento. 
+ recomendacion: re-hacer validacion de fecha de nacimiento-->
+
+<MainLayout title="Asistencia">
+  <section>
+    <form class="check-in-form">
+      <fieldset>
+        <legend>Completa el formulario para asistir al festival</legend>
+        <label for="first-name"
+          >Nombres: <input type="text" name="first-name" />
+          <span class="hidden">Mensaje</span>
+        </label>
+        <br />
+        <label for="last-name"
+          >Apellido: <input type="text" name="last-name" />
+          <span class="hidden">Mensaje</span>
+        </label>
+        <br />
+
+        <label for="document"
+          >Documento: <input type="number" name="document" />
+          <span class="hidden">Mensaje</span>
+        </label>
+
+        <br />
+
+        <label for="contact-number"
+          >Numero de contacto:
+          <input type="tel" name="contact-number" />
+          <span class="hidden">Mensaje</span>
+        </label>
+        <br />
+        <label for="email"
+          >Email:
+          <input type="text" name="email" />
+          <span class="hidden">Mensaje</span>
+        </label>
+
+        <br />
+
+        <label for="birthday"
+          >Fecha de nacimiento: <input type="date" name="birthday" />
+          <span class="hidden">Mensaje</span>
+        </label>
+
+        <br />
+      </fieldset>
+      <button type="submit">Confirmar</button>
+    </form>
+  </section>
+</MainLayout>
+
+<script>
+  // const $form = document.querySelector('.check-in-form') as HTMLFormElement;
+  // console.log($form);
+
+  // $form.addEventListener("submit", event => {
+  //  event.preventDefault();
+  //   console.log(event.target);
+  // });
+  window.addEventListener("DOMContentLoaded", () => {
+    const formInputs = document.querySelectorAll(
+      'input[name]:not([type="checkbox"])'
+    );
+
+    const form = document.querySelector("form");
+
+    const validateName = (name) => {
+      const regExp = new RegExp(/^[a-zA-Z\s]+$/);
+      return name.length > 0 && regExp.test(name);
+    };
+
+    const validatePhone = (numberPhone) => {
+      
+      return true;
+    }
+    
+    
+    const validateNumber = (document) => {
+
+      return true;
+    }
+
+    const validateEmail = (email) => {
+      return true;
+    }
+
+    const validateBirthday = (birthday) => {
+      const today = new Date();
+      const eighteenYearsAgo = new Date(
+        today.getFullYear() - 18,
+        today.getMonth(),
+        today.getDate()
+      );
+      const birthdayDate = new Date(birthday);
+      return birthdayDate <= eighteenYearsAgo;
+    };
+
+    const DEFAULT_FUNCTION = (_) => true;
+    const VALIDATION_FUNCTIONS = {
+      "first-name": validateName,
+      "last-name": validateName,
+      "document": validateNumber,
+      "contact-number": validatePhone,
+      "email": validateEmail,
+      "birthday": validateBirthday,
+    };
+
+    formInputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        const { name, value } = input;
+        const validationFunction =
+          VALIDATION_FUNCTIONS[name] ?? DEFAULT_FUNCTION;
+        const isValid = validationFunction(value);
+        input.classList.toggle("invalid", !isValid);
+
+        const errorMessage = input.nextElementSibling;
+        errorMessage.classList.toggle("hidden", isValid);
+
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = !form.checkValidity();
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+
+      const firstName = formData.get("first-name");
+      const lastName = formData.get("last-name");
+      const dni = formData.get("document");
+      const contactNumber = formData.get("contact-number");
+      const email = formData.get("email");
+      const birthday = formData.get("birthday");
+
+      const newAssitent = {
+        firstName,
+        lastName,
+        dni,
+        contactNumber,
+        email,
+        birthday,
+      };
+      // console.log(newAssitent);
+
+      sessionStorage.setItem("assistent", JSON.stringify(newAssitent));
+    });
+  });
+</script>
+
+<style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .invalid {
+    border: 1px red groove;
+    color: black;
+  }
+</style>
