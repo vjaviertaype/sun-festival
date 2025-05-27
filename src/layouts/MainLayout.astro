@@ -34,7 +34,7 @@ const { title } = Astro.props;
   :root {
     --bg-header: oklch(0.4413 0.2031 311.18);
     --bg-titles: oklch(0.7234 0.1878 49.51);
-    --heading: oklab(1 0 0);
+    --white: oklab(1 0 0);
     --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
     --text: oklab(0.25 0 0);
@@ -42,9 +42,11 @@ const { title } = Astro.props;
     --primary-dark: oklab(0.45 0.25 -0.1);
     --border: oklch(0.4413 0.2031 311.18);
     --muted: oklab(0 0 0);
+
+    --bg-footer: oklch(0.7234 0.1878 49.51);
   }
 
-  /* RESET de CSS */
+  /* Inicio RESET de CSS */
   *,
   *::before,
   *::after {
@@ -79,5 +81,74 @@ const { title } = Astro.props;
     font: inherit;
   }
 
-  /*FIN RESET CSS */
+  /* Fin RESET de CSS */
+
+  header {
+    background-color: var(--bg-header);
+    padding: 2rem 2.5rem;
+  }
+
+  :is(h1, h2, h3, h4, h5, h6) {
+    font-weight: 600;
+  }
+
+  h2 {
+    background-color: var(--bg-titles);
+    font-weight: lighter;
+  }
+
+  :is(h1, h2) {
+    color: var(--white);
+    border-radius: 20px;
+
+    margin: 1rem;
+    padding: 1rem 1.5rem;
+  }
+
+  :is(h3, h4, h5, h6) {
+    padding: 0.5rem 0.25rem;
+    margin: 1rem 0.75rem;
+  }
+
+  ol,
+  ul {
+    list-style: none;
+  }
+
+  li {
+    display: block;
+    padding-left: 1.2rem;
+    margin: 0.25rem 0.5rem;
+  }
+
+  a {
+    color: var(--primary);
+    display: block;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem;
+  }
+
+  p,
+  img {
+    margin: 1.2rem;
+  }
+
+  footer {
+    background-color: var(--bg-footer);
+    padding: 1em 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--white);
+  }
 </style>
