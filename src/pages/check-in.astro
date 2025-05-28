@@ -2,67 +2,60 @@
 import MainLayout from "@layouts/MainLayout.astro";
 ---
 
-<!-- tendrá un formulario para acreditar su asistencia al evento. 
- El formulario tendrá los campos nombre y apellido, documento (solo dni o seleccionable y nro de documento), numero de contacto, email y fecha de nacimiento. 
- recomendacion: re-hacer validacion de fecha de nacimiento-->
-
 <MainLayout title="Asistencia">
-  <section>
-    <form class="check-in-form">
-      <fieldset>
-        <legend>Completa el formulario para asistir al festival</legend>
-        <label for="first-name"
-          >Nombres: <input type="text" name="first-name" />
-          <span class="hidden">Mensaje</span>
-        </label>
-        <br />
-        <label for="last-name"
-          >Apellido: <input type="text" name="last-name" />
-          <span class="hidden">Mensaje</span>
-        </label>
-        <br />
+  <form class="check-in-form">
+    <fieldset>
+      <legend>Completa el formulario para asistir al festival</legend>
+      <label for="first-name"
+        >Nombres: <input type="text" id="first-name" name="first-name" />
+        <span class="hidden"></span>
+      </label>
+      <br />
+      <label for="last-name"
+        >Apellido: <input type="text" id="last-name" name="last-name" />
+        <span class="hidden"></span>
+      </label>
+      <br />
 
-        <label for="document"
-          >Documento: <input type="number" name="document" />
-          <span class="hidden">Mensaje</span>
-        </label>
+      <label for="document"
+        >Documento: <input type="number" id="document" name="document" />
+        <span class="hidden"></span>
+      </label>
 
-        <br />
+      <br />
 
-        <label for="contact-number"
-          >Numero de contacto:
-          <input type="tel" name="contact-number" />
-          <span class="hidden">Mensaje</span>
-        </label>
-        <br />
-        <label for="email"
-          >Email:
-          <input type="text" name="email" />
-          <span class="hidden">Mensaje</span>
-        </label>
+      <label for="contact-number"
+        >Numero de contacto: <input
+          type="tel"
+          id="contact-number"
+          name="contact-number"
+        />
+        <span class="hidden"></span>
+      </label>
+      <br />
+      <label for="email"
+        >Email:<input type="text" id="email" name="email" />
+        <span class="hidden"></span>
+      </label>
 
-        <br />
+      <br />
 
-        <label for="birthday"
-          >Fecha de nacimiento: <input type="date" name="birthday" />
-          <span class="hidden">Mensaje</span>
-        </label>
+      <label for="birthday"
+        >Fecha de nacimiento: <input
+          type="date"
+          id="birthday"
+          name="birthday"
+        />
+        <span class="hidden"></span>
+      </label>
 
-        <br />
-      </fieldset>
-      <button type="submit">Confirmar</button>
-    </form>
-  </section>
+      <br />
+    </fieldset>
+    <button type="submit">Confirmar</button>
+  </form>
 </MainLayout>
 
 <script>
-  // const $form = document.querySelector('.check-in-form') as HTMLFormElement;
-  // console.log($form);
-
-  // $form.addEventListener("submit", event => {
-  //  event.preventDefault();
-  //   console.log(event.target);
-  // });
   window.addEventListener("DOMContentLoaded", () => {
     const formInputs = document.querySelectorAll(
       'input[name]:not([type="checkbox"])'
@@ -70,25 +63,38 @@ import MainLayout from "@layouts/MainLayout.astro";
 
     const form = document.querySelector("form");
 
-    const validateName = (name) => {
+    const validateName = (name: string) => {
       const regExp = new RegExp(/^[a-zA-Z\s]+$/);
-      return name.length > 0 && regExp.test(name);
+      if (name.length == 0) {
+        return "No puede quedar vacio el nombre";
+      } else if (name.length > 22) {
+        return "No puede contener mas de 22 caracteres";
+      } else if (!regExp.test(name)) {
+        return "El campo debe contener solo letras";
+      }
+      return false;
     };
 
     const validatePhone = (numberPhone) => {
-      
-      return true;
-    }
-    
-    
+      const regExp = /^\+54\d{2,4}(15)?\d{6,8}$/;
+      const isValidFormat = regExp.test(numberPhone);
+      const totalLength = numberPhone.length;
+
+      return isValidFormat && totalLength >= 13 && totalLength <= 15;
+    };
+
     const validateNumber = (document) => {
+      const regExp = /^\d{8,15}$/;
 
-      return true;
-    }
+      return regExp.test(document);
+    };
 
-    const validateEmail = (email) => {
-      return true;
-    }
+    const validateEmail = (email: string) => {
+      const regExp =
+        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+      let isValid = regExp.test(email);
+      return isValid;
+    };
 
     const validateBirthday = (birthday) => {
       const today = new Date();
@@ -105,10 +111,10 @@ import MainLayout from "@layouts/MainLayout.astro";
     const VALIDATION_FUNCTIONS = {
       "first-name": validateName,
       "last-name": validateName,
-      "document": validateNumber,
+      document: validateNumber,
       "contact-number": validatePhone,
-      "email": validateEmail,
-      "birthday": validateBirthday,
+      email: validateEmail,
+      birthday: validateBirthday,
     };
 
     formInputs.forEach((input) => {
@@ -117,10 +123,13 @@ import MainLayout from "@layouts/MainLayout.astro";
         const validationFunction =
           VALIDATION_FUNCTIONS[name] ?? DEFAULT_FUNCTION;
         const isValid = validationFunction(value);
-        input.classList.toggle("invalid", !isValid);
+
+        input.classList.toggle("invalid", !!isValid);
 
         const errorMessage = input.nextElementSibling;
-        errorMessage.classList.toggle("hidden", isValid);
+        errorMessage?.classList.toggle("hidden", !!!isValid);
+
+        errorMessage?.innerHTML = !isValid?'': isValid;
 
         const submitButton = form.querySelector('button[type="submit"]');
         submitButton.disabled = !form.checkValidity();
@@ -170,5 +179,105 @@ import MainLayout from "@layouts/MainLayout.astro";
   .invalid {
     border: 1px red groove;
     color: black;
+  }
+
+  section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* altura completa de la pantalla */
+    padding: 2rem;
+  }
+
+  .check-in-form {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+  }
+
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  legend {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+  }
+
+  input.invalid {
+    border-color: red;
+  }
+
+  /* Para los mensajes de error */
+  span.hidden {
+    display: none;
+    font-size: 0.875rem;
+    color: red;
+  }
+
+  span:not(.hidden) {
+    display: block;
+    margin-top: 0.25rem;
+  }
+  button {
+    background: #1aab8a;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 30px;
+    font-size: 1em;
+    padding: 0 2em;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+  }
+
+  button:hover {
+    background: #fff;
+    color: #1aab8a;
+  }
+  button:before,
+  button:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 30px;
+    background: #1aab8a;
+    transition: 400ms ease all;
+  }
+  button:after {
+    right: inherit;
+    top: inherit;
+    left: 0;
+    bottom: 0;
+  }
+
+  button:hover:before,
+  button:hover:after {
+    width: 100%;
+    transition: 800ms ease all;
   }
 </style>
