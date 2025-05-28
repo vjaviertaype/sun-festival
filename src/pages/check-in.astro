@@ -69,10 +69,12 @@ import MainLayout from "@layouts/MainLayout.astro";
         return "No puede quedar vacio el nombre";
       } else if (name.length > 22) {
         return "No puede contener mas de 22 caracteres";
-      } else if (!regExp.test(name)) {
+      }
+
+      if (!regExp.test(name)) {
         return "El campo debe contener solo letras";
       }
-      return false;
+      return true;
     };
 
     const validatePhone = (numberPhone) => {
@@ -122,14 +124,21 @@ import MainLayout from "@layouts/MainLayout.astro";
         const { name, value } = input;
         const validationFunction =
           VALIDATION_FUNCTIONS[name] ?? DEFAULT_FUNCTION;
-        const isValid = validationFunction(value);
+        const validationResult = validationFunction(value);
 
-        input.classList.toggle("invalid", !!isValid);
+        const isValid = validationResult === true;
+
+        input.classList.toggle("invalid", !isValid);
 
         const errorMessage = input.nextElementSibling;
-        errorMessage?.classList.toggle("hidden", !!!isValid);
-
-        errorMessage?.innerHTML = !isValid?'': isValid;
+        if (errorMessage) {
+          errorMessage.classList.toggle("hidden", isValid);
+          if (!isValid && typeof validationResult === "string") {
+            errorMessage.textContent = validationResult;
+          } else {
+            errorMessage.textContent = "";
+          }
+        }
 
         const submitButton = form.querySelector('button[type="submit"]');
         submitButton.disabled = !form.checkValidity();
