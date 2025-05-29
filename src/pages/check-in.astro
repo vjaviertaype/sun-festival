@@ -65,9 +65,13 @@ import MainLayout from "@layouts/MainLayout.astro";
 
     const validateName = (name: string) => {
       const regExp = new RegExp(/^[a-zA-Z\s]+$/);
-      if (name.length == 0) {
+      const totalLength = name.length;
+
+      if (totalLength == 0) {
         return "No puede quedar vacio el nombre";
-      } else if (name.length > 22) {
+      }
+
+      if (totalLength > 22) {
         return "No puede contener mas de 22 caracteres";
       }
 
@@ -82,24 +86,31 @@ import MainLayout from "@layouts/MainLayout.astro";
       const isValidFormat = regExp.test(numberPhone);
       const totalLength = numberPhone.length;
 
-      return isValidFormat && totalLength >= 13 && totalLength <= 15;
+      if (!isValidFormat) {
+        return "el formato es invalido. ej:+54xxxxxxxxxx";
+      }
+
+      if (totalLength < 13 || totalLength > 15) {
+        return "Debe de tener entre 13 y 15 digitos";
+      }
+
+      return true;
     };
 
     const validateNumber = (dni) => {
-    
-
-      if(dni.length < 8 || dni.length > 10 ) {
-        return '';
+      if (dni.length < 8 || dni.length > 10) {
+        return "Debe de tener entre 8 y 10 digitos";
       }
       return true;
     };
 
-
-    const validateEmail = (email) => {
+    const validateEmail = (email: string) => {
       const regExp =
         /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-      let isValid = regExp.test(email);
-      return isValid;
+      if (!regExp.test(email)) {
+        return "Correo electronico invalido";
+      }
+      return true;
     };
 
     const validateBirthday = (birthday) => {
@@ -110,7 +121,12 @@ import MainLayout from "@layouts/MainLayout.astro";
         today.getDate()
       );
       const birthdayDate = new Date(birthday);
-      return birthdayDate <= eighteenYearsAgo;
+
+      if (birthdayDate > eighteenYearsAgo) {
+        return "Solo se pueden registrar personas mayores de 18 años";
+      }
+
+      return true;
     };
 
     const DEFAULT_FUNCTION = (_) => true;
@@ -157,7 +173,7 @@ import MainLayout from "@layouts/MainLayout.astro";
 
       const firstName = formData.get("first-name");
       const lastName = formData.get("last-name");
-      const dni = formData.get("document");
+      const dni = formData.get("dni");
       const contactNumber = formData.get("contact-number");
       const email = formData.get("email");
       const birthday = formData.get("birthday");
@@ -170,9 +186,8 @@ import MainLayout from "@layouts/MainLayout.astro";
         email,
         birthday,
       };
-      // console.log(newAssitent);
 
-      sessionStorage.setItem("assistent", JSON.stringify(newAssitent));
+      localStorage.setItem("assistent", JSON.stringify(newAssitent));
     });
   });
 </script>
