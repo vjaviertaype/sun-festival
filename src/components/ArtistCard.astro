@@ -1,0 +1,128 @@
+---
+const { name, url_image, members, summary, top_songs } = Astro.props;
+---
+
+<article class="artist-card">
+  <header class="artist-card__header">
+    <h2 class="artist-card__title">{name}</h2>
+  </header>
+
+  <figure class="artist-card__figure">
+    {
+      url_image && (
+        <img
+          class="artist-card__image"
+          src={url_image}
+          alt={`Imagen de ${name}`}
+        />
+      )
+    }
+    <figcaption class="artist-card__caption">
+      Foto promocional de {name}
+    </figcaption>
+  </figure>
+
+  <section class="artist-card__body">
+    <h4 class="artist-card__section-title">Miembros</h4>
+    {
+      members && (
+        <ul class="artist-card__member-list">
+          {members.map((member) => (
+            <li class="artist-card__member-item">
+              <strong class="artist-card__member-name">{member.name}</strong> –{" "}
+              <span class="artist-card__member-role">{member.role}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+</article>
+
+<style>
+  .artist-card {
+    margin: 1rem;
+    display: grid;
+    grid-template-areas:
+      "header"
+      "image"
+      "content";
+    gap: 1rem;
+    width: fit-content;
+    max-width: 60rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-top-left-radius: 10px;
+    box-shadow: 5px 5px 4px black;
+  }
+
+  .artist-card__header {
+    grid-area: header;
+    text-align: center;
+  }
+
+  .artist-card__title {
+    font-size: 1.75rem;
+    margin: 0;
+  }
+
+  .artist-card__figure {
+    grid-area: image;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .artist-card__image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .artist-card__caption {
+    font-size: 0.875rem;
+    color: #555;
+    margin-top: 0.5rem;
+  }
+
+  .artist-card__body {
+    grid-area: content;
+  }
+
+  .artist-card__section-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .artist-card__member-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .artist-card__member-item {
+    margin-bottom: 0.5rem;
+  }
+
+  .artist-card__member-name {
+    font-weight: bold;
+  }
+
+  .artist-card__member-role {
+    font-style: italic;
+  }
+
+  @media (min-width: 768px) {
+    .artist-card {
+      grid-template-areas:
+        "header header"
+        "image content";
+      grid-template-columns: 1fr 2fr;
+      align-items: start;
+    }
+
+    .artist-card__figure {
+      justify-self: center;
+    }
+  }
+</style>

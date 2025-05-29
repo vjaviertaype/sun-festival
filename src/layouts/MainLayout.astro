@@ -1,0 +1,31 @@
+---
+const { title } = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header>
+      <h1>texto</h1>
+      <nav>
+        <ul>
+          <li><a href=""></a></li>
+          <li><a href=""></a></li>
+          <li><a href=""></a></li>
+          <li><a href=""></a></li>
+          <li><a href=""></a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>Derechos reservados @copyright 2025</footer>
+  </body>
+</html>

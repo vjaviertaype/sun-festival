@@ -1,0 +1,65 @@
+---
+const { time = [], groups = [] } = Astro.props;
+---
+
+<table class="artist-table">
+  <thead class="artist-table__head">
+    <tr>
+      <th>Horario</th>
+      <th>Artista</th>
+      <th>Foto</th>
+      <th>Miembros</th>
+      <th>Top Canciones</th>
+    </tr>
+  </thead>
+  <tbody class="artist-table__body">
+    {
+      groups.map((group, index) => (
+        <tr class="artist-table__row">
+          <td class="artist-table__time">{time[index]}</td>
+          <td class="artist-table__name">{group.name}</td>
+          <td class="artist-table__image-cell">
+            <img
+              class="artist-table__artist-image"
+              src={group.url_image}
+              alt={group.name}
+            />
+          </td>
+          <td class="artist-table__members">
+            <ul class="artist-table__member-list">
+              {group.members.map((member) => (
+                <li class="artist-table__member-item">
+                  {`${member.name} (${member.role})`}
+                </li>
+              ))}
+            </ul>
+          </td>
+          <td class="artist-table__songs">
+            <ul class="artist-table__song-list">
+              {group.top_songs.map((song) => (
+                <li class="artist-table__song-item">
+                  <img
+                    class="artist-table__song-cover"
+                    src={song.cover_art_url}
+                    alt={song.title}
+                  />
+                  {`${song.title} - ${Math.round(song.play_count / 1000000)}M`}
+                </li>
+              ))}
+            </ul>
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<style>
+  .artist-table__artist-image {
+    width: 6rem;
+  }
+
+  .artist-table__song-cover {
+    width: 2rem;
+  }
+</style>
