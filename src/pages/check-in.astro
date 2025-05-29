@@ -17,8 +17,8 @@ import MainLayout from "@layouts/MainLayout.astro";
       </label>
       <br />
 
-      <label for="document"
-        >Documento: <input type="number" id="document" name="document" />
+      <label for="dni"
+        >DNI: <input type="number" id="dni" name="dni" />
         <span class="hidden"></span>
       </label>
 
@@ -85,13 +85,17 @@ import MainLayout from "@layouts/MainLayout.astro";
       return isValidFormat && totalLength >= 13 && totalLength <= 15;
     };
 
-    const validateNumber = (document) => {
-      const regExp = /^\d{8,15}$/;
+    const validateNumber = (dni) => {
+    
 
-      return regExp.test(document);
+      if(dni.length < 8 || dni.length > 10 ) {
+        return '';
+      }
+      return true;
     };
 
-    const validateEmail = (email: string) => {
+
+    const validateEmail = (email) => {
       const regExp =
         /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
       let isValid = regExp.test(email);
@@ -113,11 +117,12 @@ import MainLayout from "@layouts/MainLayout.astro";
     const VALIDATION_FUNCTIONS = {
       "first-name": validateName,
       "last-name": validateName,
-      document: validateNumber,
+      dni: validateNumber,
       "contact-number": validatePhone,
       email: validateEmail,
       birthday: validateBirthday,
     };
+    // VALIDATION_FUNCTIONS["first-name"]
 
     formInputs.forEach((input) => {
       input.addEventListener("input", () => {
@@ -140,12 +145,12 @@ import MainLayout from "@layouts/MainLayout.astro";
           }
         }
 
-        const submitButton = form.querySelector('button[type="submit"]');
-        submitButton.disabled = !form.checkValidity();
+        const submitButton = form?.querySelector('button[type="submit"]');
+        submitButton.disabled = !form?.checkValidity();
       });
     });
 
-    form.addEventListener("submit", (event) => {
+    form?.addEventListener("submit", (event) => {
       event.preventDefault();
 
       const formData = new FormData(form);
