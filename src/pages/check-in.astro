@@ -1,0 +1,312 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+---
+
+<MainLayout title="Asistencia">
+  <form class="check-in-form">
+    <fieldset>
+      <legend>Completa el formulario para asistir al festival</legend>
+      <label for="first-name"
+        >Nombres: <input type="text" id="first-name" name="first-name" />
+        <span class="hidden"></span>
+      </label>
+      <br />
+      <label for="last-name"
+        >Apellido: <input type="text" id="last-name" name="last-name" />
+        <span class="hidden"></span>
+      </label>
+      <br />
+
+      <label for="dni"
+        >DNI: <input type="number" id="dni" name="dni" />
+        <span class="hidden"></span>
+      </label>
+
+      <br />
+
+      <label for="contact-number"
+        >Numero de contacto: <input
+          type="tel"
+          id="contact-number"
+          name="contact-number"
+        />
+        <span class="hidden"></span>
+      </label>
+      <br />
+      <label for="email"
+        >Email:<input type="text" id="email" name="email" />
+        <span class="hidden"></span>
+      </label>
+
+      <br />
+
+      <label for="birthday"
+        >Fecha de nacimiento: <input
+          type="date"
+          id="birthday"
+          name="birthday"
+        />
+        <span class="hidden"></span>
+      </label>
+
+      <br />
+    </fieldset>
+    <button type="submit">Confirmar</button>
+  </form>
+</MainLayout>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const formInputs = document.querySelectorAll(
+      'input[name]:not([type="checkbox"])'
+    );
+
+    const form = document.querySelector("form");
+
+    const validateName = (name: string) => {
+      const regExp = new RegExp(/^[a-zA-Z\s]+$/);
+      const totalLength = name.length;
+
+      if (totalLength == 0) {
+        return "No puede quedar vacio el nombre";
+      }
+
+      if (totalLength > 22) {
+        return "No puede contener mas de 22 caracteres";
+      }
+
+      if (!regExp.test(name)) {
+        return "El campo debe contener solo letras";
+      }
+      return true;
+    };
+
+    const validatePhone = (numberPhone) => {
+      const regExp = /^\+54\d{2,4}(15)?\d{6,8}$/;
+      const isValidFormat = regExp.test(numberPhone);
+      const totalLength = numberPhone.length;
+
+      if (!isValidFormat) {
+        return "el formato es invalido. ej:+54xxxxxxxxxx";
+      }
+
+      if (totalLength < 13 || totalLength > 15) {
+        return "Debe de tener entre 13 y 15 digitos";
+      }
+
+      return true;
+    };
+
+    const validateNumber = (dni) => {
+      if (dni.length < 8 || dni.length > 10) {
+        return "Debe de tener entre 8 y 10 digitos";
+      }
+      return true;
+    };
+
+    const validateEmail = (email: string) => {
+      const regExp =
+        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+      if (!regExp.test(email)) {
+        return "Correo electronico invalido";
+      }
+      return true;
+    };
+
+    const validateBirthday = (birthday) => {
+      const today = new Date();
+      const eighteenYearsAgo = new Date(
+        today.getFullYear() - 18,
+        today.getMonth(),
+        today.getDate()
+      );
+      const birthdayDate = new Date(birthday);
+
+      if (birthdayDate > eighteenYearsAgo) {
+        return "Solo se pueden registrar personas mayores de 18 años";
+      }
+
+      return true;
+    };
+
+    const DEFAULT_FUNCTION = (_) => true;
+    const VALIDATION_FUNCTIONS = {
+      "first-name": validateName,
+      "last-name": validateName,
+      dni: validateNumber,
+      "contact-number": validatePhone,
+      email: validateEmail,
+      birthday: validateBirthday,
+    };
+    // VALIDATION_FUNCTIONS["first-name"]
+
+    formInputs.forEach((input) => {
+      input.addEventListener("input", () => {
+        const { name, value } = input;
+        const validationFunction =
+          VALIDATION_FUNCTIONS[name] ?? DEFAULT_FUNCTION;
+        const validationResult = validationFunction(value);
+
+        const isValid = validationResult === true;
+
+        input.classList.toggle("invalid", !isValid);
+
+        const errorMessage = input.nextElementSibling;
+        if (errorMessage) {
+          errorMessage.classList.toggle("hidden", isValid);
+          if (!isValid && typeof validationResult === "string") {
+            errorMessage.textContent = validationResult;
+          } else {
+            errorMessage.textContent = "";
+          }
+        }
+
+        const submitButton = form?.querySelector('button[type="submit"]');
+        submitButton.disabled = !form?.checkValidity();
+      });
+    });
+
+    form?.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+
+      const firstName = formData.get("first-name");
+      const lastName = formData.get("last-name");
+      const dni = formData.get("dni");
+      const contactNumber = formData.get("contact-number");
+      const email = formData.get("email");
+      const birthday = formData.get("birthday");
+
+      const newAssitent = {
+        firstName,
+        lastName,
+        dni,
+        contactNumber,
+        email,
+        birthday,
+      };
+
+      localStorage.setItem("assistent", JSON.stringify(newAssitent));
+    });
+  });
+</script>
+
+<style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .invalid {
+    border: 1px red groove;
+    color: black;
+  }
+
+  section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* altura completa de la pantalla */
+    padding: 2rem;
+  }
+
+  .check-in-form {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+  }
+
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  legend {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+  }
+
+  input.invalid {
+    border-color: red;
+  }
+
+  /* Para los mensajes de error */
+  span.hidden {
+    display: none;
+    font-size: 0.875rem;
+    color: red;
+  }
+
+  span:not(.hidden) {
+    display: block;
+    margin-top: 0.25rem;
+  }
+  button {
+    background: #1aab8a;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 30px;
+    font-size: 1em;
+    padding: 0 2em;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+  }
+
+  button:hover {
+    background: #fff;
+    color: #1aab8a;
+  }
+  button:before,
+  button:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 30px;
+    background: #1aab8a;
+    transition: 400ms ease all;
+  }
+  button:after {
+    right: inherit;
+    top: inherit;
+    left: 0;
+    bottom: 0;
+  }
+
+  button:hover:before,
+  button:hover:after {
+    width: 100%;
+    transition: 800ms ease all;
+  }
+</style>
