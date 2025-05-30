@@ -1,7 +1,8 @@
 ---
+import { Image } from "astro:assets";
+import fns from "@assets/fns.png";
 const { title } = Astro.props;
 ---
-
 <html lang="es">
   <head>
     <meta charset="utf-8" />
@@ -12,20 +13,209 @@ const { title } = Astro.props;
   </head>
   <body>
     <header>
-      <h1>texto</h1>
-      <nav>
-        <ul>
-          <li><a href=""></a></li>
-          <li><a href=""></a></li>
-          <li><a href=""></a></li>
-          <li><a href=""></a></li>
-          <li><a href=""></a></li>
-        </ul>
-      </nav>
+      <Image src={fns} alt="logoFestivalNacionalDelSol"></Image>
     </header>
-    <main>
-      <slot />
-    </main>
-    <footer>Derechos reservados @copyright 2025</footer>
+    <nav class="nav-bar">
+      <ul class="nav-bar__list">
+        <li class="nav-bar__list-item"><a href="/">FIESTA DEL SOL 2025</a></li>
+        <li class="nav-bar__list-item"><a href="/artists">ARTISTAS</a></li>
+        <li class="nav-bar__list-item"><a href="/contact">CONTACTO</a></li>
+        <li class="nav-bar__list-item"><a href="/schedule">CRONOGRAMA</a></li>
+        <li class="nav-bar__list-item"><a href="/check-in">ASISTENCIA</a></li>
+      </ul>
+    </nav>
+      <main>
+        <slot />
+      </main>
+      <footer>Derechos reservados @copyright 2025</footer>
+    
   </body>
+
+  <style is:global>
+    :root {
+      --bg-nav: oklch(0.4413 0.2031 311.18);
+      --bg-titles: oklch(0.7234 0.1878 49.51);
+      --white: oklab(1 0 0);
+      --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+      --text: oklab(0.25 0 0);
+      --primary: oklab(0.6 0.25 -0.1);
+      --primary-dark: oklab(0.45 0.25 -0.1);
+      --border: oklch(0.4413 0.2031 311.18);
+      --muted: oklab(0 0 0);
+
+      --bg-footer: oklch(0.7234 0.1878 49.51);
+    }
+    /* Inicio RESET de CSS */
+    *,
+    *::before,
+    *::after {
+      font-family: var(--font-body);
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    img,
+    picture,
+    video,
+    canvas,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    input,
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    /* Fin RESET de CSS */
+    *,
+    *::before,
+    *::after {
+      font-family: var(--font-body);
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      padding: 1.8rem 0;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    :is(h1, h2, h3, h4, h5, h6) {
+      font-weight: 600;
+    }
+
+    h1,
+    h2 {
+      background-color: var(--bg-titles);
+      color: var(--white);
+      font-weight: lighter;
+      border-radius: 20px;
+
+      margin: 1rem;
+      padding: 1rem 1.5rem;
+    }
+
+    :is(h3, h4, h5, h6) {
+      padding: 0.5rem 0.25rem;
+      margin: 1rem 0.75rem;
+    }
+
+    ol,
+    ul {
+      list-style: none;
+    }
+
+    li {
+      display: block;
+      padding-left: 1.2rem;
+      margin: 0.25rem 0.5rem;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+
+    }
+
+    a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 2rem;
+    }
+
+    p,
+    img {
+      margin: 1.2rem;
+    }
+
+    footer {
+      background-color: var(--bg-footer);
+      padding: 1rem 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.9em;
+      color: var(--white);
+    }
+
+    .nav-bar {
+      background-color: var(--bg-nav);
+      height: 10rem;
+
+    }
+
+    .nav-bar__list {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      gap: 5rem;
+    }
+    .nav-bar__list-item {
+      padding: 0;
+
+    }
+    .nav-bar__list-item > a {
+      display: block;
+      color: var(--white);
+      padding: 1rem 2rem;
+      border-radius: 0.8rem;
+    }
+    .nav-bar__list-item > a:hover {
+      color: var(--primary-dark);
+      background: var(--white);
+    }
+
+    @media screen and (min-width: 768px) {
+      main {
+        padding: 0.5rem 1.5rem;
+      }
+    }
+
+    @media screen and (min-width: 992px) {
+      main {
+        padding: 2.5rem 10rem;
+      }
+    }
+
+    @media screen and (min-width: 1200px) {
+      main {
+        padding: 3.5rem 11rem;
+      }
+    }
+  </style>
 </html>

@@ -1,0 +1,13 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+---
+
+<MainLayout title="Contacto">
+  <h2>Contactanos</h2>
+  <form>
+    <label for="name">Nombre: <input name="name" type="text" /><span>Mensaje de error</span></label>
+    <label for="email">Correo Electronico: <input name="email" type="email" /><span>Mensaje de error</span></label>
+    <label for="msj">Mensaje: <textarea name="msj" /><span>Mensaje de error</span></label>
+    <button type="submit">Enviar</button>
+  </form>
+</MainLayout>
