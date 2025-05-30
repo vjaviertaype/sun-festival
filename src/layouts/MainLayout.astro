@@ -15,11 +15,11 @@ const { title } = Astro.props;
       <h1>texto</h1>
       <nav>
         <ul>
-          <li><a href=""></a></li>
-          <li><a href=""></a></li>
-          <li><a href=""></a></li>
-          <li><a href=""></a></li>
-          <li><a href=""></a></li>
+          <li><a href="">a</a></li>
+          <li><a href="">a</a></li>
+          <li><a href="">n</a></li>
+          <li><a href="">a</a></li>
+          <li><a href="">a</a></li>
         </ul>
       </nav>
     </header>
@@ -32,7 +32,7 @@ const { title } = Astro.props;
 
 <style is:global>
   :root {
-    --bg-header: oklch(0.4413 0.2031 311.18);
+    --bg-nav: oklch(0.4413 0.2031 311.18);
     --bg-titles: oklch(0.7234 0.1878 49.51);
     --white: oklab(1 0 0);
     --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -94,21 +94,22 @@ const { title } = Astro.props;
   }
 
   header {
-    background-color: var(--bg-header);
-    padding: 2rem 2.5rem;
+    padding: 1.8rem 0;
+  }
+
+  nav {
+    background-color: var(--bg-nav);
   }
 
   :is(h1, h2, h3, h4, h5, h6) {
     font-weight: 600;
   }
 
+  h1,
   h2 {
     background-color: var(--bg-titles);
-    font-weight: lighter;
-  }
-
-  :is(h1, h2) {
     color: var(--white);
+    font-weight: lighter;
     border-radius: 20px;
 
     margin: 1rem;
@@ -161,5 +162,23 @@ const { title } = Astro.props;
     text-align: center;
     font-size: 0.9em;
     color: var(--white);
+  }
+
+  @media screen and (min-width: 768px) {
+    main {
+      padding: 0.5rem 1.5rem;
+    }
+  }
+
+  @media screen and (min-width: 992px) {
+    main {
+      padding: 2.5rem 10rem;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    main {
+      padding: 3.5rem 15rem;
+    }
   }
 </style>
