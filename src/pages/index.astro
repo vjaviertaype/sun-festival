@@ -1,7 +1,9 @@
 ---
 import MainLayout from "@layouts/MainLayout.astro";
+import fnsPortada from "@assets/fiesta-nacional-portada.jpg";
 
 import artists from "@assets/artists.json";
+import { Image } from "astro:assets";
 
 const artistGroups = artists.groups.map((group) => group.name);
 ---
@@ -13,7 +15,7 @@ const artistGroups = artists.groups.map((group) => group.name);
       Aquí encontrarás toda la información que necesitás conocer sobre la Fiesta
       del Sol 2025: fecha, artistas, cronograma y asistentes y mucho más!
     </p>
-    <img src="" alt="baner del fiesta del sol 2025" />
+    <Image src={fnsPortada} alt="baner del fiesta del sol 2025" />
     <p class="intro__paragraf">
       La Fiesta Nacional del Sol, máxima celebración de los sanjuaninos, es una
       tradicional fiesta que se lleva a cabo anualmente en la provincia de San
@@ -23,9 +25,7 @@ const artistGroups = artists.groups.map((group) => group.name);
       La Fiesta del Sol 2025, FNS 2025, se llevará a cabo en el Estadio del
       Bicentenario y el Velódromo Vicente Chancay, contando con la presencia de
       consagrados artistas de nivel internacional tales como {
-        artistGroups.slice(0, -1).join(", ") +
-          " y " +
-          artistGroups[artistGroups.length - 1]
+        artistGroups.slice(0, -1).join(", ") + " y " + artistGroups.at(-1)
       }.
     </p>
     <ul class="list">
