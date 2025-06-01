@@ -2,12 +2,286 @@
 import MainLayout from "@layouts/MainLayout.astro";
 ---
 
-<MainLayout title="Contacto">
-  <h2>Contactanos</h2>
-  <form>
-    <label for="name">Nombre: <input name="name" type="text" /><span>Mensaje de error</span></label>
-    <label for="email">Correo Electronico: <input name="email" type="email" /><span>Mensaje de error</span></label>
-    <label for="msj">Mensaje: <textarea name="msj" /><span>Mensaje de error</span></label>
-    <button type="submit">Enviar</button>
+<MainLayout title="Asistencia">
+  <form class="contact-form">
+    <fieldset>
+      <legend>Contactanos</legend>
+      <label for="full-name"
+        >Nombre Completo: <input type="text" id="full-name" name="full-name" />
+        <span class="hidden"></span>
+      </label>
+      <br />
+      <label for="email"
+        >Email:<input type="text" id="email" name="email" />
+        <span class="hidden"></span>
+      </label>
+      <br />
+      <label for="message"
+        >Mensaje:<textarea id="message" name="message" />
+        <span class="hidden"></span>
+      </label>
+      <br />
+    </fieldset>
+    <button type="submit">Confirmar</button>
   </form>
 </MainLayout>
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    const formInputs = document.querySelectorAll(
+      'input[name]:not([type="checkbox"])'
+    );
+
+    const form = document.querySelector("form");
+
+    const validateName = (name: string) => {
+      const regExp = new RegExp(/^[a-zA-Z\s]+$/);
+      const totalLength = name.length;
+
+      if (totalLength == 0) {
+        return "No puede quedar vacio el nombre";
+      }
+
+      if (totalLength > 22) {
+        return "No puede contener mas de 22 caracteres";
+      }
+
+      if (!regExp.test(name)) {
+        return "El campo debe contener solo letras";
+      }
+      return true;
+    };
+    const validateEmail = (email: string) => {
+      const regExp =
+        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+      if (!regExp.test(email)) {
+        return "Correo electronico invalido";
+      }
+      return true;
+    };
+
+    const validateMsg = (msg)=>{
+      if(!msg){
+        return "No deberia estar vacio"
+      }
+      if(msg.lengtho <= 2500){
+        return " Excede la cantidad de caracteristicas "
+      }
+      return true;
+    }
+    const DEFAULT_FUNCTION = (_) => true;
+    const VALIDATION_FUNCTIONS = {
+      "full-name": validateName,
+      email: validateEmail,
+    };
+    // VALIDATION_FUNCTIONS["full-name"]
+
+    const msgArea = document.querySelector('textarea[name="message"]') 
+    const fullNameInput = document.querySelector('input[name="full-name"]') 
+    const emailInput = document.querySelector('input[name="email"]') 
+
+    msgArea.addEventListener("input", () => {
+        const { value } = msgArea;
+      
+        const validationResult = validateMsg(value);
+
+        const isValid = validationResult === true;
+
+        msgArea.classList.toggle("invalid", !isValid);
+
+        const errorMessage = msgArea.nextElementSibling;
+        if (errorMessage) {
+          errorMessage.classList.toggle("hidden", isValid);
+          if (!isValid && typeof validationResult === "string") {
+            errorMessage.textContent = validationResult;
+          } else {
+            errorMessage.textContent = "";
+          }
+        }
+
+        const submitButton = form?.querySelector('button[type="submit"]');
+        submitButton.disabled = isValid;
+      });
+      fullNameInput.addEventListener("input", () => {
+        const { value } = fullNameInput;
+      
+        const validationResult = validateName(value);
+
+        const isValid = validationResult === true;
+
+        fullNameInput.classList.toggle("invalid", !isValid);
+
+        const errorMessage = fullNameInput.nextElementSibling;
+        if (errorMessage) {
+          errorMessage.classList.toggle("hidden", isValid);
+          if (!isValid && typeof validationResult === "string") {
+            errorMessage.textContent = validationResult;
+          } else {
+            errorMessage.textContent = "";
+          }
+        }
+
+        const submitButton = form?.querySelector('button[type="submit"]');
+        submitButton.disabled = isValid;
+      });
+      emailInput.addEventListener("input", () => {
+        const { value } = emailInput;
+      
+        const validationResult = validateEmail(value);
+
+        const isValid = validationResult === true;
+
+        emailInput.classList.toggle("invalid", !isValid);
+
+        const errorMessage = emailInput.nextElementSibling;
+        if (errorMessage) {
+          errorMessage.classList.toggle("hidden", isValid);
+          if (!isValid && typeof validationResult === "string") {
+            errorMessage.textContent = validationResult;
+          } else {
+            errorMessage.textContent = "";
+          }
+        }
+
+        const submitButton = form?.querySelector('button[type="submit"]');
+        submitButton.disabled = isValid;
+      });
+
+    form?.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+
+      const fullName = formData.get("full-name");
+      const email = formData.get("email");
+
+      const contactData = {
+        fullName,
+        email,
+      };
+
+      localStorage.setItem("contact-data", JSON.stringify(contactData));
+    });
+  });
+</script>
+
+<style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .invalid {
+    border: 1px red groove;
+    color: black;
+  }
+
+  section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* altura completa de la pantalla */
+    padding: 2rem;
+  }
+
+  .contact-form {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+  }
+
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  legend {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+
+  }
+
+  input.invalid, textarea.input{
+    border-color: red;
+  }
+
+  /* Para los mensajes de error */
+  span.hidden {
+    display: none;
+    font-size: 0.875rem;
+    color: red;
+  }
+
+  span:not(.hidden) {
+    display: block;
+    margin-top: 0.25rem;
+  }
+  button {
+    background: #1aab8a;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 30px;
+    font-size: 1em;
+    padding: 0 2em;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+  }
+
+  button:hover {
+    background: #fff;
+    color: #1aab8a;
+  }
+  button:before,
+  button:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 30px;
+    background: #1aab8a;
+    transition: 400ms ease all;
+  }
+  button:after {
+    right: inherit;
+    top: inherit;
+    left: 0;
+    bottom: 0;
+  }
+
+  button:hover:before,
+  button:hover:after {
+    width: 100%;
+    transition: 800ms ease all;
+  }
+
+</style>
