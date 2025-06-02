@@ -38,20 +38,61 @@ const { time = [], groups = [] } = Astro.props;
 </table>
 
 <style>
+  :root {
+    --color-header-bg: oklch(0.7234 0.1878 49.51);
+    --color-header-text: oklch(1 0 0);
+    --color-cell-text: oklch(0.252 0 0);
+    --color-row-odd-bg: oklch(0.9821 0 0);
+    --color-row-even-bg: oklch(oklch(0.91 0.02 85));
+    --color-row-hover-bg: oklch(0.9569 0.044 83.91);
+    --color-table-border: oklch(0.8452 0 0);
+  }
+
   .artist-table {
     width: 100%;
     border-collapse: collapse;
+    border-radius: 30px;
   }
 
-  .artist-table__header,
+  .artist-table tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+  }
+
+  .artist-table tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+  }
+
+  .artist-table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+  }
+
+  .artist-table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+  }
+
+  .artist-table__header {
+    padding: 0.5rem;
+
+    background-color: var(--color-header-bg);
+    color: var(--color-header-text);
+
+    font-weight: bolder;
+    text-align: center;
+    vertical-align: middle;
+  }
+
   .artist-table__cell {
     padding: 0.5rem;
+
+    color: var(--color-cell-text);
+
+    font-weight: bold;
     text-align: left;
-    vertical-align: top;
   }
 
   .artist-table__image {
-    width: 6rem;
+    width: 10rem;
+    border-radius: 10% 30%;
   }
 
   .artist-table__members-list {
@@ -64,17 +105,28 @@ const { time = [], groups = [] } = Astro.props;
     margin-bottom: 0.25rem;
   }
 
-  /* Breakpoint: 1600px */
+  .artist-table__body tr:nth-child(odd) {
+    background-color: var(--color-row-odd-bg);
+  }
+
+  .artist-table__body tr:nth-child(even) {
+    background-color: var(--color-row-even-bg);
+  }
+
+  .artist-table__body tr:hover {
+    background-color: var(--color-row-hover-bg);
+    transition: background-color 0.3s ease;
+  }
+
   @media screen and (max-width: 1600px) {
     .artist-table__image {
-      width: 5rem;
+      width: 10rem;
     }
   }
 
-  /* Breakpoint: 1100px */
   @media screen and (max-width: 1100px) {
     .artist-table__image {
-      width: 4rem;
+      width: 8rem;
     }
 
     .artist-table__header,
@@ -83,7 +135,6 @@ const { time = [], groups = [] } = Astro.props;
     }
   }
 
-  /* Breakpoint: 800px */
   @media screen and (max-width: 800px) {
     .artist-table {
       display: block;
@@ -100,21 +151,15 @@ const { time = [], groups = [] } = Astro.props;
     .artist-table__row {
       display: block;
       margin-bottom: 2rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--color-table-border);
       border-radius: 0.5rem;
-      padding: 1rem;
+      overflow: hidden;
     }
 
     .artist-table__cell {
       display: flex;
-      align-items: center;
-      padding: 0.25rem 0;
-    }
-
-    .artist-table__cell::before {
-      flex: 0 0 40%;
-      font-weight: bold;
-      color: #333;
+      flex-direction: row;
+      padding: 0;
     }
 
     .artist-table__cell:nth-child(1)::before {
@@ -133,14 +178,34 @@ const { time = [], groups = [] } = Astro.props;
       content: "Miembros";
     }
 
-    .artist-table__cell:nth-child(5)::before {
-      content: "Top Canciones";
+    .artist-table__cell::before {
+      flex: 0 0 40%;
+
+      display: flex;
+      padding: 0.5rem;
+      margin-right: 1rem;
+
+      color: var(--color-header-text);
+      background-color: var(--color-header-bg);
+
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .artist-table__row:nth-of-type(odd) .artist-table__cell {
+      background-color: var(--color-row-odd-bg);
+    }
+
+    .artist-table__row:nth-of-type(even) .artist-table__cell {
+      background-color: var(--color-row-even-bg);
     }
 
     .artist-table__image {
-      width: 5rem;
-      border-radius: 10% 30%;
-      margin-left: auto;
+      display: block;
+      margin: 0 auto;
+      margin-bottom: 1rem;
+      width: 100%;
+      max-width: 8rem;
     }
   }
 </style>
