@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "type": "module",
+  "name": "sun-festival-fs2025",
+  "type": "commonjs",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.7.13"
+    "astro": "^5.7.13",
+    "sharp": "^0.34.2"
   }
 }
