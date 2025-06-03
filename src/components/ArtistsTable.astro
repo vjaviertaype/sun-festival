@@ -5,46 +5,29 @@ const { time = [], groups = [] } = Astro.props;
 <table class="artist-table">
   <thead class="artist-table__head">
     <tr>
-      <th>Horario</th>
-      <th>Artista</th>
-      <th>Foto</th>
-      <th>Miembros</th>
-      <th>Top Canciones</th>
+      <th class="artist-table__header">Horario</th>
+      <th class="artist-table__header">Artista</th>
+      <th class="artist-table__header">Foto</th>
+      <th class="artist-table__header">Miembros</th>
     </tr>
   </thead>
   <tbody class="artist-table__body">
     {
       groups.map((group, index) => (
         <tr class="artist-table__row">
-          <td class="artist-table__time">{time[index]}</td>
-          <td class="artist-table__name">{group.name}</td>
-          <td class="artist-table__image-cell">
+          <td class="artist-table__cell">{time[index]}</td>
+          <td class="artist-table__cell">{group.name}</td>
+          <td class="artist-table__cell">
             <img
-              class="artist-table__artist-image"
+              class="artist-table__image"
               src={group.url_image}
               alt={group.name}
             />
           </td>
-          <td class="artist-table__members">
-            <ul class="artist-table__member-list">
+          <td class="artist-table__cell">
+            <ul class="artist-table__members-list">
               {group.members.map((member) => (
-                <li class="artist-table__member-item">
-                  {`${member.name} (${member.role})`}
-                </li>
-              ))}
-            </ul>
-          </td>
-          <td class="artist-table__songs">
-            <ul class="artist-table__song-list">
-              {group.top_songs.map((song) => (
-                <li class="artist-table__song-item">
-                  <img
-                    class="artist-table__song-cover"
-                    src={song.cover_art_url}
-                    alt={song.title}
-                  />
-                  {`${song.title} - ${Math.round(song.play_count / 1000000)}M`}
-                </li>
+                <li class="artist-table__member-item">{`${member.name} (${member.role})`}</li>
               ))}
             </ul>
           </td>
@@ -55,11 +38,168 @@ const { time = [], groups = [] } = Astro.props;
 </table>
 
 <style>
-  .artist-table__artist-image {
-    width: 6rem;
+  :root {
+    --color-header-bg: oklch(0.7234 0.1878 49.51);
+    --color-header-text: oklch(1 0 0);
+    --color-cell-text: oklch(0.252 0 0);
+    --color-row-odd-bg: oklch(0.9821 0 0);
+    --color-row-even-bg: oklch(oklch(0.91 0.02 85));
+    --color-row-hover-bg: oklch(0.9569 0.044 83.91);
+    --color-table-border: oklch(0.8452 0 0);
   }
 
-  .artist-table__song-cover {
-    width: 2rem;
+  .artist-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 30px;
+  }
+
+  .artist-table tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+  }
+
+  .artist-table tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+  }
+
+  .artist-table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+  }
+
+  .artist-table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+  }
+
+  .artist-table__header {
+    padding: 0.5rem;
+
+    background-color: var(--color-header-bg);
+    color: var(--color-header-text);
+
+    font-weight: bolder;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .artist-table__cell {
+    padding: 0.5rem;
+
+    color: var(--color-cell-text);
+
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .artist-table__image {
+    width: 10rem;
+    border-radius: 10% 30%;
+  }
+
+  .artist-table__members-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .artist-table__member-item {
+    margin-bottom: 0.25rem;
+  }
+
+  .artist-table__body tr:nth-child(odd) {
+    background-color: var(--color-row-odd-bg);
+  }
+
+  .artist-table__body tr:nth-child(even) {
+    background-color: var(--color-row-even-bg);
+  }
+
+  .artist-table__body tr:hover {
+    background-color: var(--color-row-hover-bg);
+    transition: background-color 0.3s ease;
+  }
+
+  @media screen and (max-width: 1600px) {
+    .artist-table__image {
+      width: 10rem;
+    }
+  }
+
+  @media screen and (max-width: 1100px) {
+    .artist-table__image {
+      width: 8rem;
+    }
+
+    .artist-table__header,
+    .artist-table__cell {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .artist-table,
+    .artist-table__body {
+      display: block;
+    }
+
+    .artist-table__head {
+      display: none;
+    }
+
+    .artist-table__row {
+      display: block;
+      margin-bottom: 2rem;
+      border: 1px solid var(--color-table-border);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .artist-table__row:hover {
+      background-color: var(--color-row-hover-bg);
+      transition: background-color 0.3s ease;
+    }
+
+    .artist-table__cell {
+      display: flex;
+      flex-direction: row;
+      padding: 0;
+    }
+
+    .artist-table__cell:nth-child(1)::before {
+      content: "Horario";
+    }
+
+    .artist-table__cell:nth-child(2)::before {
+      content: "Artista";
+    }
+
+    .artist-table__cell:nth-child(3)::before {
+      content: "Foto";
+    }
+
+    .artist-table__cell:nth-child(4)::before {
+      content: "Miembros";
+    }
+
+    .artist-table__cell::before {
+      flex: 0 0 40%;
+
+      display: flex;
+      padding: 0.5rem;
+      margin-right: 1rem;
+
+      color: var(--color-header-text);
+      background-color: var(--color-header-bg);
+
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .artist-table__image {
+      display: block;
+      margin: 0 auto;
+      margin-bottom: 1rem;
+      width: 100%;
+      max-width: 8rem;
+    }
   }
 </style>
