@@ -3,11 +3,314 @@ import MainLayout from "@layouts/MainLayout.astro";
 ---
 
 <MainLayout title="Contacto">
-  <h2>Contactanos</h2>
-  <form>
-    <label for="name">Nombre: <input name="name" type="text" /><span>Mensaje de error</span></label>
-    <label for="email">Correo Electronico: <input name="email" type="email" /><span>Mensaje de error</span></label>
-    <label for="msj">Mensaje: <textarea name="msj" /><span>Mensaje de error</span></label>
+  <form class="contact-form" id="contact-form">
+    <fieldset>
+      <legend>Contactanos</legend>
+      <label for="full-name"
+        >Nombre Completo: <input type="text" id="full-name" name="full-name" />
+        <span class="error"></span>
+      </label>
+      <br />
+      <label for="email"
+        >Email:<input type="text" id="email" name="email" />
+        <span class="error"></span>
+      </label>
+      <br />
+      <label for="message"
+        >Mensaje:<textarea id="message" name="message"></textarea>
+        <span class="error"></span>
+      </label>
+      <br />
+    </fieldset>
     <button type="submit">Enviar</button>
   </form>
 </MainLayout>
+
+<script>
+  class FieldValidator {
+    constructor(input, validationFuntion = () => false) {
+      this.input = input;
+      this.validationFuntion = validationFuntion;
+      this.errorSpan = input.nextElementSibling;
+      this.error = "";
+      this.touched = false;
+
+      input.addEventListener("input", () => this.handleInput());
+    }
+
+    handleInput() {
+      if (!this.touched) return;
+      this.validate();
+      this.renderError();
+    }
+
+    validate() {
+      const value = this.input.value.trim();
+      const result = this.validationFuntion(value);
+      if (result) {
+        this.error = result;
+        return false;
+      }
+
+      this.error = "";
+      return true;
+    }
+
+    renderError() {
+      if (this.errorSpan) {
+        this.errorSpan.textContent = this.error;
+      }
+    }
+
+    markTouched() {
+      this.touched = true;
+    }
+
+    isValid() {
+      this.markTouched();
+      const valid = this.validate();
+      this.renderError();
+      return valid;
+    }
+  }
+
+  class FormValidator {
+    constructor(form, submitFuntion = () => {}, fieldConfigs) {
+      this.form = form;
+      this.fields = [];
+      this.submitFuntion = submitFuntion;
+
+      for (let config of fieldConfigs) {
+        const input = form.querySelector(`[name="${config.name}"]`);
+        if (input) {
+          this.fields.push(new FieldValidator(input, config.validationFuntion));
+        }
+      }
+
+      this.form.addEventListener("submit", (e) => this.handleSubmit(e));
+    }
+
+    handleSubmit(e) {
+      e.preventDefault();
+
+      let allValid = true;
+      for (let field of this.fields) {
+        const valid = field.isValid();
+        if (!valid) allValid = false;
+      }
+
+      if (allValid) {
+        this.submitFuntion(this.form);
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("contact-form");
+
+    const submitToStorage = (form) => {
+      console.log("ejecutandose");
+      // this.form.submit();
+      const data = new FormData(form);
+      const objectData = Object.fromEntries(data.entries());
+      const stringData = JSON.stringify(objectData);
+      localStorage.setItem("contact-message", stringData);
+    };
+
+    const formValidator = new FormValidator(form, submitToStorage, [
+      {
+        name: "first-name",
+        validationFuntion: (name) => {
+          const regExp = new RegExp(/^[a-zA-Z\s]+$/);
+          const totalLength = name.length;
+
+          if (totalLength == 0) {
+            return "No puede quedar vacio el nombre";
+          }
+
+          if (totalLength > 15) {
+            return "No puede contener mas de 15 caracteres";
+          }
+
+          if (totalLength < 3) {
+            return "Debe tener al menos 3 caracteres";
+          }
+
+          if (!regExp.test(name)) {
+            return "El campo debe contener solo letras";
+          }
+          return false;
+        },
+      },
+      {
+        name: "full-name",
+        validationFuntion: (fullName) => {
+          const regExp = new RegExp(/^[a-zA-Z\s]+$/);
+          const totalLength = fullName.length;
+
+          if (totalLength == 0) {
+            return "No puede quedar vacio el campo";
+          }
+
+          if (totalLength > 64) {
+            return "No puede contener mas de 64 caracteres";
+          }
+
+          if (totalLength < 3) {
+            return "Debe tener al menos 3 caracteres";
+          }
+
+          if (!regExp.test(fullName)) {
+            return "El campo debe contener solo letras";
+          }
+          return false;
+        },
+      },
+      {
+        name: "email",
+        validationFuntion: (email) => {
+          const regExp =
+            /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+          if (!regExp.test(email)) {
+            return "Correo electronico invalido";
+          }
+          return false;
+        },
+      },
+      {
+        name: "message",
+        validationFuntion: (msg) => {
+          if (!msg) {
+            return "No deberia estar vacio";
+          }
+          if (msg.length > 2500) {
+            return "Excede la cantidad de caracteres";
+          }
+          return false;
+        },
+      },
+    ]);
+  });
+</script>
+
+<style>
+  :root {
+    --button-color: oklch(0.7234 0.1878 49.51);
+    --form-color: oklab(1 0 0);
+    --button-color-hover: oklch(0.4413 0.2031 311.18);
+    --button-color-active: oklab(0.45 0.25 -0.1);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .invalid {
+    border: 1px red groove;
+    color: black;
+  }
+
+  .contact-form {
+    background-color: var(--form-color);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 30rem;
+  }
+
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  legend {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+  }
+  .error {
+    color: red;
+    font-size: 0.9em;
+    display: block;
+    height: 1.2rem;
+  }
+  .contact-form > button[type="submit"] {
+    font-weight: bolder;
+    background-color: var(--button-color);
+    padding: 0.82rem 1.77rem;
+    border-radius: 10%;
+    color: white;
+
+    &:hover {
+      transition:
+        color 175ms ease-in-out,
+        background-color 175ms ease-in-out;
+      background-color: var(--button-color-hover);
+      color: #ccc;
+    }
+    &:active {
+      background-color: var(--button-color-active);
+    }
+  }
+  textarea[name="message"] {
+    display: block;
+    width: 100%;
+    height: 6rem;
+    padding: 0.25rem;
+    border: 1px solid #ccc;
+  }
+
+  
+
+  @media screen and (max-width: 1200px) {
+    .contact-form{
+      width: 50rem;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .contact-form{
+      font-size: 1.25rem;
+    }
+    legend{
+      font-size: 1.75rem;
+    }
+    textarea[name="message"]{
+      height: 15rem;
+      border-width: 2px;
+    }
+    input{
+      border-width: 2px;
+    }
+
+  }
+
+  @media screen and (max-width: 768px) {
+    .contact-form{
+      max-width: 30rem;
+      width: 100%;
+    }
+  }
+</style>

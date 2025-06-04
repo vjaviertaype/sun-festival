@@ -3,196 +3,269 @@ import MainLayout from "@layouts/MainLayout.astro";
 ---
 
 <MainLayout title="Asistencia">
-  <form class="check-in-form">
+  <form class="check-in-form" id="witness">
     <fieldset>
       <legend>Completa el formulario para asistir al festival</legend>
-      <label for="first-name"
-        >Nombres: <input type="text" id="first-name" name="first-name" />
-        <span class="hidden"></span>
-      </label>
+
+      <input type="text" name="first-name" placeholder="Nombres" />
+      <span class="error"></span>
       <br />
-      <label for="last-name"
-        >Apellido: <input type="text" id="last-name" name="last-name" />
-        <span class="hidden"></span>
-      </label>
+      <input type="text" name="last-name" placeholder="Apellido" />
+      <span class="error"></span>
       <br />
-
-      <label for="dni"
-        >DNI: <input type="number" id="dni" name="dni" />
-        <span class="hidden"></span>
-      </label>
-
+      <input type="number" name="dni" placeholder="DNI" />
+      <span class="error"></span>
       <br />
-
-      <label for="contact-number"
-        >Numero de contacto: <input
-          type="tel"
-          id="contact-number"
-          name="contact-number"
-        />
-        <span class="hidden"></span>
-      </label>
+      <input
+        type="tel"
+        name="contact-number"
+        placeholder="Numero de contacto"
+      />
+      <span class="error"></span>
       <br />
-      <label for="email"
-        >Email:<input type="text" id="email" name="email" />
-        <span class="hidden"></span>
-      </label>
-
+      <input type="text" name="email" placeholder="Email" />
+      <span class="error"></span>
       <br />
-
-      <label for="birthday"
-        >Fecha de nacimiento: <input
-          type="date"
-          id="birthday"
-          name="birthday"
-        />
-        <span class="hidden"></span>
-      </label>
-
+      <label for="birthday">Fecha de nacimiento:</label>
+      <input type="date" name="birthday" />
+      <span class="error"></span>
       <br />
     </fieldset>
-    <button type="submit">Confirmar</button>
+    <button class="button__confirm" type="submit">Confirmar</button>
   </form>
 </MainLayout>
 
 <script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const formInputs = document.querySelectorAll(
-      'input[name]:not([type="checkbox"])'
-    );
+  class FieldValidator {
+    constructor(input, validationFuntion = () => false) {
+      this.input = input;
+      this.validationFuntion = validationFuntion;
+      this.errorSpan = input.nextElementSibling;
+      this.error = "";
+      this.touched = false;
 
-    const form = document.querySelector("form");
+      input.addEventListener("input", () => this.handleInput());
+    }
 
-    const validateName = (name: string) => {
-      const regExp = new RegExp(/^[a-zA-Z\s]+$/);
-      const totalLength = name.length;
+    handleInput() {
+      if (!this.touched) return;
+      this.validate();
+      this.renderError();
+    }
 
-      if (totalLength == 0) {
-        return "No puede quedar vacio el nombre";
+    validate() {
+      const value = this.input.value.trim();
+      const result = this.validationFuntion(value);
+      if (result) {
+        this.error = result;
+        return false;
       }
 
-      if (totalLength > 22) {
-        return "No puede contener mas de 22 caracteres";
-      }
-
-      if (!regExp.test(name)) {
-        return "El campo debe contener solo letras";
-      }
+      this.error = "";
       return true;
-    };
+    }
 
-    const validatePhone = (numberPhone) => {
-      const regExp = /^\+54\d{2,4}(15)?\d{6,8}$/;
-      const isValidFormat = regExp.test(numberPhone);
-      const totalLength = numberPhone.length;
-
-      if (!isValidFormat) {
-        return "el formato es invalido. ej:+54xxxxxxxxxx";
+    renderError() {
+      if (this.errorSpan) {
+        this.errorSpan.textContent = this.error;
       }
+    }
 
-      if (totalLength < 13 || totalLength > 15) {
-        return "Debe de tener entre 13 y 15 digitos";
-      }
+    markTouched() {
+      this.touched = true;
+    }
 
-      return true;
-    };
+    isValid() {
+      this.markTouched();
+      const valid = this.validate();
+      this.renderError();
+      return valid;
+    }
+  }
 
-    const validateNumber = (dni) => {
-      if (dni.length < 8 || dni.length > 10) {
-        return "Debe de tener entre 8 y 10 digitos";
-      }
-      return true;
-    };
+  class FormValidator {
+    constructor(form, submitFuntion = () => {}, fieldConfigs) {
+      this.form = form;
+      this.fields = [];
+      this.submitFuntion = submitFuntion;
 
-    const validateEmail = (email: string) => {
-      const regExp =
-        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-      if (!regExp.test(email)) {
-        return "Correo electronico invalido";
-      }
-      return true;
-    };
-
-    const validateBirthday = (birthday) => {
-      const today = new Date();
-      const eighteenYearsAgo = new Date(
-        today.getFullYear() - 18,
-        today.getMonth(),
-        today.getDate()
-      );
-      const birthdayDate = new Date(birthday);
-
-      if (birthdayDate > eighteenYearsAgo) {
-        return "Solo se pueden registrar personas mayores de 18 años";
-      }
-
-      return true;
-    };
-
-    const DEFAULT_FUNCTION = (_) => true;
-    const VALIDATION_FUNCTIONS = {
-      "first-name": validateName,
-      "last-name": validateName,
-      dni: validateNumber,
-      "contact-number": validatePhone,
-      email: validateEmail,
-      birthday: validateBirthday,
-    };
-    // VALIDATION_FUNCTIONS["first-name"]
-
-    formInputs.forEach((input) => {
-      input.addEventListener("input", () => {
-        const { name, value } = input;
-        const validationFunction =
-          VALIDATION_FUNCTIONS[name] ?? DEFAULT_FUNCTION;
-        const validationResult = validationFunction(value);
-
-        const isValid = validationResult === true;
-
-        input.classList.toggle("invalid", !isValid);
-
-        const errorMessage = input.nextElementSibling;
-        if (errorMessage) {
-          errorMessage.classList.toggle("hidden", isValid);
-          if (!isValid && typeof validationResult === "string") {
-            errorMessage.textContent = validationResult;
-          } else {
-            errorMessage.textContent = "";
-          }
+      for (let config of fieldConfigs) {
+        const input = form.querySelector(`[name="${config.name}"]`);
+        if (input) {
+          this.fields.push(new FieldValidator(input, config.validationFuntion));
         }
+      }
 
-        const submitButton = form?.querySelector('button[type="submit"]');
-        submitButton.disabled = !form?.checkValidity();
-      });
-    });
+      this.form.addEventListener("submit", (e) => this.handleSubmit(e));
+    }
 
-    form?.addEventListener("submit", (event) => {
-      event.preventDefault();
+    handleSubmit(e) {
+      e.preventDefault();
 
-      const formData = new FormData(form);
+      let allValid = true;
+      for (let field of this.fields) {
+        const valid = field.isValid();
+        if (!valid) allValid = false;
+      }
 
-      const firstName = formData.get("first-name");
-      const lastName = formData.get("last-name");
-      const dni = formData.get("dni");
-      const contactNumber = formData.get("contact-number");
-      const email = formData.get("email");
-      const birthday = formData.get("birthday");
+      if (allValid) {
+        this.submitFuntion(this.form);
+      }
+    }
+  }
 
-      const newAssitent = {
-        firstName,
-        lastName,
-        dni,
-        contactNumber,
-        email,
-        birthday,
-      };
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("witness");
 
-      localStorage.setItem("assistent", JSON.stringify(newAssitent));
-    });
+    const submitToStorage = (form) => {
+      console.log("ejecutandose");
+      // this.form.submit();
+      const data = new FormData(form);
+      const objectData = Object.fromEntries(data.entries());
+      const stringData = JSON.stringify(objectData);
+      localStorage.setItem("witness", stringData);
+    };
+
+    const formValidator = new FormValidator(form, submitToStorage, [
+      {
+        name: "first-name",
+        validationFuntion: (name) => {
+          const regExp = new RegExp(/^[a-zA-Z\s]+$/);
+          const totalLength = name.length;
+
+          if (totalLength == 0) {
+            return "El nombre no puede quedar vacio";
+          }
+
+          if (totalLength > 15) {
+            return "No puede contener mas de 15 caracteres";
+          }
+
+          if (totalLength < 3) {
+            return "Debe tener al menos 3 caracteres";
+          }
+
+          if (!regExp.test(name)) {
+            return "El campo debe contener solo letras";
+          }
+          return false;
+        }
+      },
+      {
+        name: "last-name",
+        validationFuntion: (lastName) => {
+          const regExp = new RegExp(/^[a-zA-Z\s]+$/);
+          const totalLength = lastName.length;
+
+          if (totalLength == 0) {
+            return "Este campo no puede quedar vacio";
+          }
+
+          if (totalLength > 20) {
+            return "El apellido no puede contener más de 20 caracteres";
+          }
+
+          if (totalLength < 3) {
+            return "El apellido debe tener al menos 3 caracteres";
+          }
+
+          if (!regExp.test(lastName)) {
+            return "El campo debe contener solo letras";
+          }
+          return false;
+        }
+      },
+      {
+        name: "dni",
+        validationFuntion: (dni) => {
+          if (dni.length < 8 || dni.length > 10) {
+            return "Este campo debe tener entre 8 y 10 digitos";
+          }
+          return false;
+        },
+      },
+      {
+        name: "contact-number",
+        validationFuntion: (number: Number) =>  {
+          const numberString = number.toString();
+          console.log(number, numberString);
+          if (numberString.length == 0) {
+            return "Numero de contacto es requerido";
+          }
+          console.log(numberString);
+          // ¿Comienza con +54?
+          if (!numberString.startsWith("+54")) {
+            return "Debe comenzar con +54";
+          }
+
+          // Extraer lo que sigue después del +54
+          const rest = numberString.slice(3);
+
+          // Contiene solo números?
+          if (!/^\d+$/.test(rest)) {
+            return "Debe contener solo números luego de +54";
+          }
+
+          // Validar longitud total
+          if (numberString.length < 13 || numberString.length > 15) {
+            return "Debe tener entre 13 y 15 dígitos";
+          }
+          return false;
+        }
+      },
+      {
+        name: "email",
+        validationFuntion: (email) => {
+          let valueEmail = email
+          if (valueEmail== null || valueEmail == '')
+          {
+            return "El email es un campo obligatorio";
+          } 
+        
+          const regExp =
+            /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+          if (!regExp.test(email)) {
+            return "Correo electronico invalido";
+          }
+          return false;
+        },
+      },
+      {
+        name: "birthday",
+        validationFuntion: (birthday) => {
+          let valueDate = birthday
+          if ( valueDate== null || valueDate== '')
+          {
+           return "La fecha de nacimiento no puede quedar vacia" 
+          }
+
+          const today = new Date();
+          const eighteenYearsAgo = new Date(
+            today.getFullYear() - 18,
+            today.getMonth(),
+            today.getDate()
+          );
+          const birthdayDate = new Date(birthday);
+          
+          if (birthdayDate > eighteenYearsAgo) {
+            return "Solo se pueden registrar personas mayores de 18 años";
+          }
+          return false;
+        }
+      },
+    ]);
   });
 </script>
 
 <style>
+  :root {
+    --form-color: oklab(1 0 0);
+    --button-color: oklch(0.7234 0.1878 49.51);
+    --form-color: oklab(1 0 0);
+    --button-color-hover: oklch(0.4413 0.2031 311.18);
+    --button-color-active: oklab(0.45 0.25 -0.1);
+  }
+
   *,
   *::before,
   *::after {
@@ -200,32 +273,17 @@ import MainLayout from "@layouts/MainLayout.astro";
     margin: 0;
     padding: 0;
   }
-
+ 
   .hidden {
     display: none;
   }
 
-  .invalid {
-    border: 1px red groove;
-    color: black;
-  }
-
-  section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* altura completa de la pantalla */
-    padding: 2rem;
-  }
-
   .check-in-form {
-    background-color: #fff;
+    background-color: var(--form-color);
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    box-sizing: border-box;
+    /* width: 50rem; */
   }
 
   fieldset {
@@ -237,12 +295,9 @@ import MainLayout from "@layouts/MainLayout.astro";
   legend {
     font-size: 1.25rem;
     font-weight: bold;
-    margin-bottom: 1rem;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    align-items: center;
   }
 
   input {
@@ -253,60 +308,66 @@ import MainLayout from "@layouts/MainLayout.astro";
     border-radius: 0.5rem;
     box-sizing: border-box;
   }
+  
+  .check-in-form > button[type="submit"] {
+    font-weight: bolder;
+    background-color: var(--button-color);
+    padding: 0.82rem 1.77rem;
+    border-radius: 10%;
+    color: white;
+    
 
-  input.invalid {
-    border-color: red;
+    &:hover {
+      transition:
+      color 175ms ease-in-out;
+      background-color: 175ms ease-in-out;
+      background-color: var(--button-color-hover);
+      color: #ccc;
+    }
+    
+    &:active {
+      background-color: var(--button-color-active);
+    }
   }
-
-  /* Para los mensajes de error */
-  span.hidden {
-    display: none;
-    font-size: 0.875rem;
-    color: red;
-  }
-
-  span:not(.hidden) {
+  .error {
     display: block;
-    margin-top: 0.25rem;
+    height: 1rem;
+    color: red;
+    font-size: 0.9em;
   }
-  button {
-    background: #1aab8a;
-    color: #fff;
-    border: none;
-    position: relative;
-    height: 30px;
-    font-size: 1em;
-    padding: 0 2em;
-    cursor: pointer;
-    transition: 800ms ease all;
-    outline: none;
+ label[for="birthday"] {
+  color: gray;
+ }
+
+ @media  and (max-width: 1200px) { 
+    .check-in-form{
+      width: 50rem;
+    }
   }
 
-  button:hover {
-    background: #fff;
-    color: #1aab8a;
-  }
-  button:before,
-  button:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 2px;
-    width: 30px;
-    background: #1aab8a;
-    transition: 400ms ease all;
-  }
-  button:after {
-    right: inherit;
-    top: inherit;
-    left: 0;
-    bottom: 0;
-  }
+ @media  and (max-width: 992px){
+  .check-in-form{
+      font-size: 1.25rem;
+    }
+    legend{
+      font-size: 1.75rem;
+    }
+    input{
+      border-width: 2px;
+    }
+ }
 
-  button:hover:before,
-  button:hover:after {
+ @media screen and (max-width: 768px) {
+  .check-in-form {
+    max-width: 30rem;
     width: 100%;
-    transition: 800ms ease all;
   }
+  .check-in-form > button[type="submit"] {
+    padding: 0.52rem 1.57rem;
+    border-radius: 7%;
+  }
+
+}
+  
+ 
 </style>
