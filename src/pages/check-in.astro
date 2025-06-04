@@ -26,11 +26,12 @@ import MainLayout from "@layouts/MainLayout.astro";
       <input type="text" name="email" placeholder="Email" />
       <span class="error"></span>
       <br />
-      <input type="date" name="birthday" placeholder="Fecha de nacimiento" />
+      <label for="birthday">Fecha de nacimiento:</label>
+      <input type="date" name="birthday" />
       <span class="error"></span>
       <br />
     </fieldset>
-    <button class="disable" type="submit">Confirmar</button>
+    <button class="button__confirm" type="submit">Confirmar</button>
   </form>
 </MainLayout>
 
@@ -152,7 +153,7 @@ import MainLayout from "@layouts/MainLayout.astro";
       },
       {
         name: "last-name",
-        validationFuntion: (lastName: string | any[]) => {
+        validationFuntion: (lastName) => {
           const regExp = new RegExp(/^[a-zA-Z\s]+$/);
           const totalLength = lastName.length;
 
@@ -178,38 +179,39 @@ import MainLayout from "@layouts/MainLayout.astro";
         name: "dni",
         validationFuntion: (dni) => {
           if (dni.length < 8 || dni.length > 10) {
-            return "Debe de tener entre 8 y 10 digitos";
+            return "DNI debe tener entre 8 y 10 digitos";
           }
           return false;
         },
       },
       {
         name: "contact-number",
-        validateFuntion: (phone) => {
-          if (phone.length == 0) {
+        validationFuntion: (number: Number) =>  {
+          const numberString = number.toString();
+          console.log(number, numberString);
+          if (numberString.length == 0) {
             return "El numero de contacto es requerido";
           }
+          console.log(numberString);
           // ¿Comienza con +54?
-          if (!phone.startsWith("+54")) {
+          if (!numberString.startsWith("+54")) {
             return "Debe comenzar con +54";
           }
 
           // Extraer lo que sigue después del +54
-          const rest = phone.slice(3);
+          const rest = numberString.slice(3);
 
           //¿Contiene solo números? (ignorando el posible '15')
           if (!/^\d+$/.test(rest)) {
             return "Debe contener solo números luego de +54";
           }
 
-          // Paso 4: ¿Detectar si contiene '15' luego del código de área?
           // Paso 5: Validar longitud total
-          if (phone.length < 13 || phone.length > 15) {
+          if (numberString.length < 13 || numberString.length > 15) {
             return "Debe tener entre 13 y 15 dígitos";
           }
-
           return false;
-        },
+        }
       },
       {
         name: "email",
@@ -232,11 +234,11 @@ import MainLayout from "@layouts/MainLayout.astro";
             today.getDate()
           );
           const birthdayDate = new Date(birthday);
-
+          
+          
           if (birthdayDate > eighteenYearsAgo) {
             return "Solo se pueden registrar personas mayores de 18 años";
           }
-
           return false;
         },
       },
@@ -257,14 +259,9 @@ import MainLayout from "@layouts/MainLayout.astro";
     margin: 0;
     padding: 0;
   }
-
+ 
   .hidden {
     display: none;
-  }
-
-  .invalid {
-    border: 1px red groove;
-    color: black;
   }
 
   .check-in-form {
@@ -272,7 +269,7 @@ import MainLayout from "@layouts/MainLayout.astro";
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    width: 50rem;
+    /* width: 50rem; */
   }
 
   fieldset {
@@ -284,12 +281,9 @@ import MainLayout from "@layouts/MainLayout.astro";
   legend {
     font-size: 1.25rem;
     font-weight: bold;
-    margin-bottom: 1rem;
-  }
-
-  label {
-    display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    align-items: center;
   }
 
   input {
@@ -300,8 +294,49 @@ import MainLayout from "@layouts/MainLayout.astro";
     border-radius: 0.5rem;
     box-sizing: border-box;
   }
+  .button__confirm {
+    padding: 0.82rem 1.77rem;
+    border-radius: 10%;
+    color: white;
+    background-color: var(--button-color);
+  }
+  .button:hover {
+    background-color: #ffbf00;
+  }
   .error {
+    display: block;
+    height: 1rem;
     color: red;
     font-size: 0.9em;
   }
+ label[for="birthday"] {
+  color: gray;
+ }
+
+ @media  and (max-width: 1200px) { 
+    .check-in-form{
+      width: 50rem;
+    }
+  }
+
+ @media  and (max-width: 992px){
+  .check-in-form{
+      font-size: 1.25rem;
+    }
+    legend{
+      font-size: 1.75rem;
+    }
+    input{
+      border-width: 2px;
+    }
+ }
+
+ @media screen and (max-width: 768px) {
+  .check-in-form {
+    max-width: 30rem;
+    width: 100%;
+  }
+}
+  
+ 
 </style>
