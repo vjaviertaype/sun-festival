@@ -2,170 +2,205 @@
 import MainLayout from "@layouts/MainLayout.astro";
 ---
 
-<MainLayout title="Asistencia">
-  <form class="contact-form">
+<MainLayout title="Contacto">
+  <form class="contact-form" id="contact-form">
     <fieldset>
       <legend>Contactanos</legend>
       <label for="full-name"
         >Nombre Completo: <input type="text" id="full-name" name="full-name" />
-        <span class="hidden"></span>
+        <span class="error"></span>
       </label>
       <br />
       <label for="email"
         >Email:<input type="text" id="email" name="email" />
-        <span class="hidden"></span>
+        <span class="error"></span>
       </label>
       <br />
       <label for="message"
-        >Mensaje:<textarea id="message" name="message" />
-        <span class="hidden"></span>
+        >Mensaje:<textarea id="message" name="message"></textarea>
+        <span class="error"></span>
       </label>
       <br />
     </fieldset>
-    <button type="submit">Confirmar</button>
+    <button type="submit">Enviar</button>
   </form>
 </MainLayout>
 
 <script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const formInputs = document.querySelectorAll(
-      'input[name]:not([type="checkbox"])'
-    );
+  class FieldValidator {
+    constructor(input, validationFuntion = () => false) {
+      this.input = input;
+      this.validationFuntion = validationFuntion;
+      this.errorSpan = input.nextElementSibling;
+      this.error = "";
+      this.touched = false;
 
-    const form = document.querySelector("form");
+      input.addEventListener("input", () => this.handleInput());
+    }
 
-    const validateName = (name: string) => {
-      const regExp = new RegExp(/^[a-zA-Z\s]+$/);
-      const totalLength = name.length;
+    handleInput() {
+      if (!this.touched) return;
+      this.validate();
+      this.renderError();
+    }
 
-      if (totalLength == 0) {
-        return "No puede quedar vacio el nombre";
+    validate() {
+      const value = this.input.value.trim();
+      const result = this.validationFuntion(value);
+      if (result) {
+        this.error = result;
+        return false;
       }
 
-      if (totalLength > 22) {
-        return "No puede contener mas de 22 caracteres";
-      }
-
-      if (!regExp.test(name)) {
-        return "El campo debe contener solo letras";
-      }
-      return true;
-    };
-    const validateEmail = (email: string) => {
-      const regExp =
-        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-      if (!regExp.test(email)) {
-        return "Correo electronico invalido";
-      }
-      return true;
-    };
-
-    const validateMsg = (msg)=>{
-      if(!msg){
-        return "No deberia estar vacio"
-      }
-      if(msg.lengtho <= 2500){
-        return " Excede la cantidad de caracteristicas "
-      }
+      this.error = "";
       return true;
     }
-    const DEFAULT_FUNCTION = (_) => true;
-    const VALIDATION_FUNCTIONS = {
-      "full-name": validateName,
-      email: validateEmail,
+
+    renderError() {
+      if (this.errorSpan) {
+        this.errorSpan.textContent = this.error;
+      }
+    }
+
+    markTouched() {
+      this.touched = true;
+    }
+
+    isValid() {
+      this.markTouched();
+      const valid = this.validate();
+      this.renderError();
+      return valid;
+    }
+  }
+
+  class FormValidator {
+    constructor(form, submitFuntion = () => {}, fieldConfigs) {
+      this.form = form;
+      this.fields = [];
+      this.submitFuntion = submitFuntion;
+
+      for (let config of fieldConfigs) {
+        const input = form.querySelector(`[name="${config.name}"]`);
+        if (input) {
+          this.fields.push(new FieldValidator(input, config.validationFuntion));
+        }
+      }
+
+      this.form.addEventListener("submit", (e) => this.handleSubmit(e));
+    }
+
+    handleSubmit(e) {
+      e.preventDefault();
+
+      let allValid = true;
+      for (let field of this.fields) {
+        const valid = field.isValid();
+        if (!valid) allValid = false;
+      }
+
+      if (allValid) {
+        this.submitFuntion(this.form);
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("contact-form");
+
+    const submitToStorage = (form) => {
+      console.log("ejecutandose");
+      // this.form.submit();
+      const data = new FormData(form);
+      const objectData = Object.fromEntries(data.entries());
+      const stringData = JSON.stringify(objectData);
+      localStorage.setItem("contact-message", stringData);
     };
-    // VALIDATION_FUNCTIONS["full-name"]
 
-    const msgArea = document.querySelector('textarea[name="message"]') 
-    const fullNameInput = document.querySelector('input[name="full-name"]') 
-    const emailInput = document.querySelector('input[name="email"]') 
+    const formValidator = new FormValidator(form, submitToStorage, [
+      {
+        name: "first-name",
+        validationFuntion: (name) => {
+          const regExp = new RegExp(/^[a-zA-Z\s]+$/);
+          const totalLength = name.length;
 
-    msgArea.addEventListener("input", () => {
-        const { value } = msgArea;
-      
-        const validationResult = validateMsg(value);
-
-        const isValid = validationResult === true;
-
-        msgArea.classList.toggle("invalid", !isValid);
-
-        const errorMessage = msgArea.nextElementSibling;
-        if (errorMessage) {
-          errorMessage.classList.toggle("hidden", isValid);
-          if (!isValid && typeof validationResult === "string") {
-            errorMessage.textContent = validationResult;
-          } else {
-            errorMessage.textContent = "";
+          if (totalLength == 0) {
+            return "No puede quedar vacio el nombre";
           }
-        }
 
-        const submitButton = form?.querySelector('button[type="submit"]');
-        submitButton.disabled = isValid;
-      });
-      fullNameInput.addEventListener("input", () => {
-        const { value } = fullNameInput;
-      
-        const validationResult = validateName(value);
-
-        const isValid = validationResult === true;
-
-        fullNameInput.classList.toggle("invalid", !isValid);
-
-        const errorMessage = fullNameInput.nextElementSibling;
-        if (errorMessage) {
-          errorMessage.classList.toggle("hidden", isValid);
-          if (!isValid && typeof validationResult === "string") {
-            errorMessage.textContent = validationResult;
-          } else {
-            errorMessage.textContent = "";
+          if (totalLength > 15) {
+            return "No puede contener mas de 15 caracteres";
           }
-        }
 
-        const submitButton = form?.querySelector('button[type="submit"]');
-        submitButton.disabled = isValid;
-      });
-      emailInput.addEventListener("input", () => {
-        const { value } = emailInput;
-      
-        const validationResult = validateEmail(value);
-
-        const isValid = validationResult === true;
-
-        emailInput.classList.toggle("invalid", !isValid);
-
-        const errorMessage = emailInput.nextElementSibling;
-        if (errorMessage) {
-          errorMessage.classList.toggle("hidden", isValid);
-          if (!isValid && typeof validationResult === "string") {
-            errorMessage.textContent = validationResult;
-          } else {
-            errorMessage.textContent = "";
+          if (totalLength < 3) {
+            return "Debe tener al menos 3 caracteres";
           }
-        }
 
-        const submitButton = form?.querySelector('button[type="submit"]');
-        submitButton.disabled = isValid;
-      });
+          if (!regExp.test(name)) {
+            return "El campo debe contener solo letras";
+          }
+          return false;
+        },
+      },
+      {
+        name: "full-name",
+        validationFuntion: (fullName) => {
+          const regExp = new RegExp(/^[a-zA-Z\s]+$/);
+          const totalLength = fullName.length;
 
-    form?.addEventListener("submit", (event) => {
-      event.preventDefault();
+          if (totalLength == 0) {
+            return "No puede quedar vacio el campo";
+          }
 
-      const formData = new FormData(form);
+          if (totalLength > 64) {
+            return "No puede contener mas de 64 caracteres";
+          }
 
-      const fullName = formData.get("full-name");
-      const email = formData.get("email");
+          if (totalLength < 3) {
+            return "Debe tener al menos 3 caracteres";
+          }
 
-      const contactData = {
-        fullName,
-        email,
-      };
-
-      localStorage.setItem("contact-data", JSON.stringify(contactData));
-    });
+          if (!regExp.test(fullName)) {
+            return "El campo debe contener solo letras";
+          }
+          return false;
+        },
+      },
+      {
+        name: "email",
+        validationFuntion: (email) => {
+          const regExp =
+            /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+          if (!regExp.test(email)) {
+            return "Correo electronico invalido";
+          }
+          return false;
+        },
+      },
+      {
+        name: "message",
+        validationFuntion: (msg) => {
+          if (!msg) {
+            return "No deberia estar vacio";
+          }
+          if (msg.length > 2500) {
+            return "Excede la cantidad de caracteres";
+          }
+          return false;
+        },
+      },
+    ]);
   });
 </script>
 
 <style>
+  :root {
+    --button-color: oklch(0.7234 0.1878 49.51);
+    --form-color: oklab(1 0 0);
+    --button-color-hover: oklch(0.4413 0.2031 311.18);
+    --button-color-active: oklab(0.45 0.25 -0.1);
+  }
+
   *,
   *::before,
   *::after {
@@ -183,22 +218,12 @@ import MainLayout from "@layouts/MainLayout.astro";
     color: black;
   }
 
-  section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* altura completa de la pantalla */
-    padding: 2rem;
-  }
-
   .contact-form {
-    background-color: #fff;
+    background-color: var(--form-color);
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    box-sizing: border-box;
+    width: 30rem;
   }
 
   fieldset {
@@ -215,73 +240,77 @@ import MainLayout from "@layouts/MainLayout.astro";
 
   label {
     display: block;
-    margin-bottom: 1rem;
   }
 
-  input, textarea {
+  input {
     width: 100%;
     padding: 0.5rem;
     margin-top: 0.25rem;
     border: 1px solid #ccc;
     border-radius: 0.5rem;
     box-sizing: border-box;
-
   }
-
-  input.invalid, textarea.input{
-    border-color: red;
-  }
-
-  /* Para los mensajes de error */
-  span.hidden {
-    display: none;
-    font-size: 0.875rem;
+  .error {
     color: red;
-  }
-
-  span:not(.hidden) {
+    font-size: 0.9em;
     display: block;
-    margin-top: 0.25rem;
+    height: 1.2rem;
   }
-  button {
-    background: #1aab8a;
-    color: #fff;
-    border: none;
-    position: relative;
-    height: 30px;
-    font-size: 1em;
-    padding: 0 2em;
-    cursor: pointer;
-    transition: 800ms ease all;
-    outline: none;
-  }
+  .contact-form > button[type="submit"] {
+    font-weight: bolder;
+    background-color: var(--button-color);
+    padding: 0.82rem 1.77rem;
+    border-radius: 10%;
+    color: white;
 
-  button:hover {
-    background: #fff;
-    color: #1aab8a;
+    &:hover {
+      transition:
+        color 175ms ease-in-out,
+        background-color 175ms ease-in-out;
+      background-color: var(--button-color-hover);
+      color: #ccc;
+    }
+    &:active {
+      background-color: var(--button-color-active);
+    }
   }
-  button:before,
-  button:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 2px;
-    width: 30px;
-    background: #1aab8a;
-    transition: 400ms ease all;
-  }
-  button:after {
-    right: inherit;
-    top: inherit;
-    left: 0;
-    bottom: 0;
-  }
-
-  button:hover:before,
-  button:hover:after {
+  textarea[name="message"] {
+    display: block;
     width: 100%;
-    transition: 800ms ease all;
+    height: 6rem;
+    padding: 0.25rem;
+    border: 1px solid #ccc;
   }
 
+  
+
+  @media screen and (max-width: 1200px) {
+    .contact-form{
+      width: 50rem;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    .contact-form{
+      font-size: 1.25rem;
+    }
+    legend{
+      font-size: 1.75rem;
+    }
+    textarea[name="message"]{
+      height: 15rem;
+      border-width: 2px;
+    }
+    input{
+      border-width: 2px;
+    }
+
+  }
+
+  @media screen and (max-width: 768px) {
+    .contact-form{
+      max-width: 30rem;
+      width: 100%;
+    }
+  }
 </style>
