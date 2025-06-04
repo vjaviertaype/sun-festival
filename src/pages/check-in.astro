@@ -134,7 +134,7 @@ import MainLayout from "@layouts/MainLayout.astro";
           const totalLength = name.length;
 
           if (totalLength == 0) {
-            return "No puede quedar vacio el nombre";
+            return "El nombre no puede quedar vacio";
           }
 
           if (totalLength > 15) {
@@ -149,7 +149,7 @@ import MainLayout from "@layouts/MainLayout.astro";
             return "El campo debe contener solo letras";
           }
           return false;
-        },
+        }
       },
       {
         name: "last-name",
@@ -158,11 +158,11 @@ import MainLayout from "@layouts/MainLayout.astro";
           const totalLength = lastName.length;
 
           if (totalLength == 0) {
-            return "No puede quedar vacio el apellido";
+            return "Este campo no puede quedar vacio";
           }
 
           if (totalLength > 20) {
-            return "El apellido no puede contener mas de 20 caracteres";
+            return "El apellido no puede contener más de 20 caracteres";
           }
 
           if (totalLength < 3) {
@@ -173,13 +173,13 @@ import MainLayout from "@layouts/MainLayout.astro";
             return "El campo debe contener solo letras";
           }
           return false;
-        },
+        }
       },
       {
         name: "dni",
         validationFuntion: (dni) => {
           if (dni.length < 8 || dni.length > 10) {
-            return "DNI debe tener entre 8 y 10 digitos";
+            return "Este campo debe tener entre 8 y 10 digitos";
           }
           return false;
         },
@@ -190,7 +190,7 @@ import MainLayout from "@layouts/MainLayout.astro";
           const numberString = number.toString();
           console.log(number, numberString);
           if (numberString.length == 0) {
-            return "El numero de contacto es requerido";
+            return "Numero de contacto es requerido";
           }
           console.log(numberString);
           // ¿Comienza con +54?
@@ -201,12 +201,12 @@ import MainLayout from "@layouts/MainLayout.astro";
           // Extraer lo que sigue después del +54
           const rest = numberString.slice(3);
 
-          //¿Contiene solo números? (ignorando el posible '15')
+          // Contiene solo números?
           if (!/^\d+$/.test(rest)) {
             return "Debe contener solo números luego de +54";
           }
 
-          // Paso 5: Validar longitud total
+          // Validar longitud total
           if (numberString.length < 13 || numberString.length > 15) {
             return "Debe tener entre 13 y 15 dígitos";
           }
@@ -216,6 +216,12 @@ import MainLayout from "@layouts/MainLayout.astro";
       {
         name: "email",
         validationFuntion: (email) => {
+          let valueEmail = email
+          if (valueEmail== null || valueEmail == '')
+          {
+            return "El email es un campo obligatorio";
+          } 
+        
           const regExp =
             /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
           if (!regExp.test(email)) {
@@ -227,6 +233,12 @@ import MainLayout from "@layouts/MainLayout.astro";
       {
         name: "birthday",
         validationFuntion: (birthday) => {
+          let valueDate = birthday
+          if ( valueDate== null || valueDate== '')
+          {
+           return "La fecha de nacimiento no puede quedar vacia" 
+          }
+
           const today = new Date();
           const eighteenYearsAgo = new Date(
             today.getFullYear() - 18,
@@ -235,12 +247,11 @@ import MainLayout from "@layouts/MainLayout.astro";
           );
           const birthdayDate = new Date(birthday);
           
-          
           if (birthdayDate > eighteenYearsAgo) {
             return "Solo se pueden registrar personas mayores de 18 años";
           }
           return false;
-        },
+        }
       },
     ]);
   });
@@ -248,8 +259,11 @@ import MainLayout from "@layouts/MainLayout.astro";
 
 <style>
   :root {
+    --form-color: oklab(1 0 0);
     --button-color: oklch(0.7234 0.1878 49.51);
     --form-color: oklab(1 0 0);
+    --button-color-hover: oklch(0.4413 0.2031 311.18);
+    --button-color-active: oklab(0.45 0.25 -0.1);
   }
 
   *,
@@ -294,14 +308,26 @@ import MainLayout from "@layouts/MainLayout.astro";
     border-radius: 0.5rem;
     box-sizing: border-box;
   }
-  .button__confirm {
+  
+  .check-in-form > button[type="submit"] {
+    font-weight: bolder;
+    background-color: var(--button-color);
     padding: 0.82rem 1.77rem;
     border-radius: 10%;
     color: white;
-    background-color: var(--button-color);
-  }
-  .button:hover {
-    background-color: #ffbf00;
+    
+
+    &:hover {
+      transition:
+      color 175ms ease-in-out;
+      background-color: 175ms ease-in-out;
+      background-color: var(--button-color-hover);
+      color: #ccc;
+    }
+    
+    &:active {
+      background-color: var(--button-color-active);
+    }
   }
   .error {
     display: block;
@@ -336,6 +362,11 @@ import MainLayout from "@layouts/MainLayout.astro";
     max-width: 30rem;
     width: 100%;
   }
+  .check-in-form > button[type="submit"] {
+    padding: 0.52rem 1.57rem;
+    border-radius: 7%;
+  }
+
 }
   
  
