@@ -1,12 +1,12 @@
 ---
 import fns from "@assets/fns.png";
-import fnsN from "@assets/fns_negativo.webp";
-import GSJLogo from "@assets/GSJ_logo_H_negativo.webp";
+import Footer from "@components/Footer.astro";
 
 import { Image } from "astro:assets";
 
 const { title } = Astro.props;
 ---
+
 <html lang="es">
   <head>
     <meta charset="utf-8" />
@@ -46,26 +46,7 @@ const { title } = Astro.props;
     <main>
       <slot />
     </main>
-    <footer class="footer">
-      <Image
-        class="footer__image footer__image--fns"
-        src={fnsN}
-        alt="logo Festival Nacional Del Sol Negativo"
-      />
-      <Image
-        class="footer__image footer__image--gsj"
-        src={GSJLogo}
-        alt="logo Gobierno de San Juan"
-      />
-      <nav class="footer__nav-bar">
-        <a href="" class="footer__nav-bar-item">F</a>
-        <a href="" class="footer__nav-bar-item">I</a>
-        <a href="" class="footer__nav-bar-item">X</a>
-        <a href="" class="footer__nav-bar-item">YT</a>
-        <!-- Social Media -->
-      </nav>
-      <p class="footer__signature">© 1972 - 2025 Fiesta Nacional del Sol</p>
-    </footer>
+    <Footer />
   </body>
 </html>
 
@@ -192,7 +173,7 @@ const { title } = Astro.props;
   section {
     width: 100%;
   }
-  
+
   p,
   img {
     margin: 1.2rem;
@@ -240,48 +221,7 @@ const { title } = Astro.props;
     color: var(--primary-dark);
     background: var(--white);
   }
-
-  .footer {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 8rem repeat(2, 2rem);
-
-    padding: 1rem 0;
-
-    background-color: var(--bg-footer);
-    color: var(--white);
-  }
-
-  .footer__image {
-    width: 10rem;
-    height: auto;
-  }
-
-  .footer__image--fns {
-    grid-row: 1;
-    grid-column: 1;
-  }
-  .footer__image--gsj {
-    grid-row: 1;
-    grid-column: 2;
-  }
-
-  .footer__nav-bar {
-    grid-row: 2;
-  }
-  .footer__signature {
-    grid-row: 3;
-  }
-
-  .footer__signature,
-  .footer__nav-bar {
-    grid-column: 1;
-
-    text-align: left;
-    padding: 1rem;
-    margin: 0;
-  }
-
+  
   @media screen and (max-width: 800px) {
     main {
       padding: 0;
