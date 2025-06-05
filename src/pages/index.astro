@@ -1,6 +1,6 @@
 ---
 import MainLayout from "@layouts/MainLayout.astro";
-import indexFns from "@assets/indexfns.jpg.jpg";
+import indexFns from "@assets/indexfns.jpg";
 
 import artists from "@assets/artists.json";
 import { Image } from "astro:assets";
@@ -8,11 +8,12 @@ import { Image } from "astro:assets";
 const artistGroups = artists.groups.map((group) => group.name);
 ---
 
-<MainLayout title="Pagina principal">
+<MainLayout title="Fiesta del Sol 2025">
   <section class="intro">
     <h1 class="index__title">Fiesta del Sol 2025</h1>
     <p class="intro__paragraf">
-      Aquí encontrarás toda la información que necesitás conocer sobre la Fiesta del Sol: fecha, <a class="list__link" href="/artists">artistas</a>, <a
+      Aquí encontrarás toda la información que necesitás conocer sobre la Fiesta
+      del Sol: fecha, <a class="list__link" href="/artists">artistas</a>, <a
         class="list__link"
         href="/schedule">cronograma</a
       >, <a class="list__link" href="/check-in">asistencia</a>
@@ -30,8 +31,8 @@ const artistGroups = artists.groups.map((group) => group.name);
     </p>
     <p class="intro__paragraf">
       La Fiesta del Sol 2025, FNS 2025, se llevará a cabo en el Estadio del
-      Bicentenario, contando con la presencia de
-      consagrados artistas de nivel internacional tales como {
+      Bicentenario, contando con la presencia de consagrados artistas de nivel
+      internacional tales como {
         artistGroups.slice(0, -1).join(", ") + " y " + artistGroups.at(-1)
       }.
     </p>
@@ -41,15 +42,15 @@ const artistGroups = artists.groups.map((group) => group.name);
     <article class="faq-item">
       <h3 class="faq-item__question">¿Cuándo es la Fiesta del Sol 2025?</h3>
       <p class="faq-item__answer">
-        El espectáculo de la edición 2025 de la tradicional Fiesta del Sol
-        se llevará a cabo el viernes 31 de octubre 2025.
+        El espectáculo de la edición 2025 de la tradicional Fiesta del Sol se
+        llevará a cabo el viernes 31 de octubre 2025.
       </p>
     </article>
     <article>
       <h3 class="faq-item__question">¿Donde es la Fiesta del Sol 2025?</h3>
       <p class="faq-item__answer">
-        La Fiesta del Sol se llevará a cabo en el Estadio del
-        Bicentenario (San Juan, Argentina).
+        La Fiesta del Sol se llevará a cabo en el Estadio del Bicentenario (San
+        Juan, Argentina).
       </p>
     </article>
   </section>
