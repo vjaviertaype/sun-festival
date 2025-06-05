@@ -11,7 +11,7 @@ Requisitos previos:
 
 # Clonar el repositorio
 git clone https://github.com/vjaviertaype/sun-festival
-cd sun-festival
+
 
 # Instalar dependencias
 pnpm install
