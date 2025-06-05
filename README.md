@@ -12,7 +12,6 @@ Requisitos previos:
 # Clonar el repositorio
 git clone https://github.com/vjaviertaype/sun-festival
 
-
 # Instalar dependencias
 pnpm install
 
@@ -23,4 +22,4 @@ pnpm dev
 
 
 # Integrantes
-Nicolas Rodriguez, Victor Javier Taype, Tamara Chapeton
+Nicolas Rodriguez, Victor Javier, Tamara Chapeton
