@@ -7,7 +7,7 @@ import artists from "@assets/artists.json";
 
 <MainLayout title="Artistas">
   <section class="artists-page__intro">
-    <h2 class="artists-page__title">Artistas</h2>
+    <h1 class="artists-page__title">Artistas</h1>
     <p class="artists-page__description">
       Aquí encontrarás toda la información que necesitás conocer sobre los
       Artistas que participaran el <span class="artists-page__highlight"
@@ -29,3 +29,13 @@ import artists from "@assets/artists.json";
     }
   </section>
 </MainLayout>
+
+<style>
+  .artists-page__container-cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+</style>

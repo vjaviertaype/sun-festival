@@ -1,0 +1,102 @@
+---
+import fnsN from "@assets/fns_negativo.webp";
+import GSJLogo from "@assets/GSJ_logo_H_negativo.webp";
+import instaicon from "@assets/icons/instagram.png";
+import fbicon from "@assets/icons/facebook.png"
+import xicon from "@assets/icons/x.png"
+import yticon from "@assets/icons/youtube.png"
+import { Image } from "astro:assets";
+---
+
+<footer class="footer">
+  <Image
+    class="footer__image footer__image--fns"
+    src={fnsN}
+    alt="logo Festival Nacional Del Sol Negativo"
+  />
+  <Image
+    class="footer__image footer__image--gsj"
+    src={GSJLogo}
+    alt="logo Gobierno de San Juan"
+  />
+  <nav class="footer__nav-bar">
+    <a
+      href="https://www.facebook.com/FNSolOficial/"
+      class="footer__nav-bar-item"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Ir a Facebook"><Image src={fbicon} alt="Facebook" class="icon"/></a
+    >
+    <a
+      href="https://www.instagram.com/fnsoloficial/"
+      class="footer__nav-bar-item"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Ir a Instagram"><Image src={instaicon} alt="Instagram" class="icon"/></a
+    >
+    <a
+      href="https://x.com/fnsoloficial"
+      class="footer__nav-bar-item"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Ir a X"><Image src={xicon} alt="X" class="icon"/></a
+    >
+    <a
+      href="https://www.youtube.com/@fnsolsj"
+      class="footer__nav-bar-item"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Ir a YouTube"><Image src={yticon} alt="YouTube" class="icon"/></a
+    >
+    <!-- Social Media -->
+  </nav>
+  <p class="footer__signature">© 1972 - 2025 Fiesta Nacional del Sol</p>
+</footer>
+<style>
+  .footer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
+    grid-auto-rows: min-content;
+
+    padding: 1rem 0;
+
+    background-color: var(--bg-footer);
+    color: var(--white);
+  }
+
+  .footer__image {
+    width: 10rem;
+    height: auto;
+  }
+
+  .footer__image--fns {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .footer__image--gsj {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .footer__nav-bar {
+    grid-row: 2;
+    padding-left: 1rem;
+  }
+  .footer__signature {
+    display: block;
+    grid-column: span 2;
+  }
+
+  .footer__signature,
+  .footer__nav-bar {
+    grid-column: 1;
+
+    text-align: left;
+  }
+  .footer__nav-bar{
+    display: flex;
+    flex-direction: row;
+  }
+  
+</style>
