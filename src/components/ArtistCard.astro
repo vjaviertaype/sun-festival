@@ -3,26 +3,23 @@ const { name, url_image, members, summary, top_songs } = Astro.props;
 ---
 
 <article class="artist-card">
-  <header class="artist-card__header">
-    <h2 class="artist-card__title">{name}</h2>
-  </header>
-
-  <figure class="artist-card__figure">
-    {
-      url_image && (
-        <img
-          class="artist-card__image"
-          src={url_image}
-          alt={`Imagen de ${name}`}
-        />
-      )
-    }
-    <figcaption class="artist-card__caption">
-      Foto promocional de {name}
-    </figcaption>
-  </figure>
-
+  <h2 class="artist-card__title">{name}</h2>
   <section class="artist-card__body">
+    <figure class="artist-card__figure">
+      {
+        url_image && (
+          <img
+            class="artist-card__image"
+            src={url_image}
+            alt={`Imagen de ${name}`}
+          />
+        )
+      }
+      <figcaption class="artist-card__caption">
+        Foto promocional de {name}
+      </figcaption>
+    </figure>
+
     <h4 class="artist-card__section-title">Miembros</h4>
     {
       members && (
@@ -41,52 +38,44 @@ const { name, url_image, members, summary, top_songs } = Astro.props;
 
 <style>
   .artist-card {
-    margin: 1rem;
-    display: grid;
-    grid-template-areas:
-      "header"
-      "image"
-      "content";
-    gap: 1rem;
-    width: fit-content;
-    max-width: 60rem;
-    padding: 1rem 1.5rem;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-top-left-radius: 10px;
-    box-shadow: 5px 5px 4px black;
-  }
+    display: flex;
+    flex-direction: column;
 
-  .artist-card__header {
-    grid-area: header;
-    text-align: center;
+    margin: 1rem;
+    gap: 1rem;
+    width: 60%;
+    max-width: 60rem;
+    padding: 1rem;
+    border-radius: 30px;
+    box-shadow: 0 8px 16px black;
   }
 
   .artist-card__title {
+    background: none;
+    color: black;
+    border-bottom: 2px solid var(--bg-footer);
+    border-radius: 0;
     font-size: 1.75rem;
+    width: 100%;
     margin: 0;
   }
 
   .artist-card__figure {
-    grid-area: image;
-    max-width: 100%;
+    width: 100%;
     text-align: center;
   }
 
   .artist-card__image {
-    max-width: 100%;
+    width: 20rem;
     height: auto;
-    border-radius: 8px;
+    margin: 0 auto;
+    border-radius: 10% 30%;
   }
 
   .artist-card__caption {
     font-size: 0.875rem;
     color: #555;
     margin-top: 0.5rem;
-  }
-
-  .artist-card__body {
-    grid-area: content;
   }
 
   .artist-card__section-title {
@@ -111,18 +100,27 @@ const { name, url_image, members, summary, top_songs } = Astro.props;
   .artist-card__member-role {
     font-style: italic;
   }
-
-  @media (min-width: 768px) {
-    .artist-card {
-      grid-template-areas:
-        "header header"
-        "image content";
-      grid-template-columns: 1fr 2fr;
-      align-items: start;
+  @media and (max-width: 1200px) {
+    .artist-card__image {
+      width: 16rem;
     }
+  }
 
-    .artist-card__figure {
-      justify-self: center;
+  @media and (max-width: 992px) {
+    .artist-card {
+      width: 100%;
+    }
+    .artist-card__image {
+      width: 12rem;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .artist-card {
+      width: 100%;
+    }
+    .artist-card__image {
+      width: 10rem;
     }
   }
 </style>
