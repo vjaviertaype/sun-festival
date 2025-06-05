@@ -213,15 +213,18 @@ const { title } = Astro.props;
   .nav-bar__list-item > a {
     text-decoration: none;
     display: inline-block;
+    width: 98%;
     text-wrap: balance;
+    text-align: center;
     color: inherit;
+    border-radius: inherit;
     padding: 1rem 1.2rem;
   }
-  .nav-bar__list-item:hover {
+  .nav-bar__list-item > a:hover {
     color: var(--primary-dark);
     background: var(--white);
   }
-  
+
   @media screen and (max-width: 800px) {
     main {
       padding: 0;
