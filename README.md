@@ -19,7 +19,7 @@ pnpm install
 pnpm dev
 
 # Despliegue en Vercel
-
+url: https://sun-festival.vercel.app
 
 # Integrantes
 Nicolas Rodriguez, Victor Javier, Tamara Chapeton
